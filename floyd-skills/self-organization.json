@@ -1,0 +1,50 @@
+{
+  "name": "self-organization",
+  "category": "General",
+  "purpose": "Enable agent systems to self-organize based on goals, constraints, and environment.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "self-organization",
+    "description": "Enable agent systems to self-organize based on goals, constraints, and environment.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "goals": {
+          "type": "array",
+          "description": "goals parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "agents": {
+          "type": "array",
+          "description": "agents parameter"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "constraints parameter"
+        },
+        "organization_pattern": {
+          "type": "string",
+          "description": "organization_pattern parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "organization": {
+        "roles": "object",
+        "structure": "object",
+        "relationships": "array"
+      },
+      "recommendations": "array",
+      "stability_metrics": "object"
+    }
+  }
+}

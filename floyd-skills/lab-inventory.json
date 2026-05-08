@@ -1,0 +1,46 @@
+{
+  "name": "lab-inventory",
+  "category": "General",
+  "purpose": "Track and manage Floyd Lab tools, skills, and resources with versioning and usage analytics.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "lab-inventory",
+    "description": "Track and manage Floyd Lab tools, skills, and resources with versioning and usage analytics.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "filter": {
+          "type": "object",
+          "description": "filter parameter"
+        },
+        "resource_type": {
+          "type": "string",
+          "description": "resource_type parameter"
+        },
+        "include_deprecated": {
+          "type": "boolean",
+          "description": "include_deprecated parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "stats": {
+        "total": "number",
+        "by_type": "object",
+        "by_status": "object"
+      },
+      "resources": "array",
+      "recommendations": "array"
+    }
+  }
+}

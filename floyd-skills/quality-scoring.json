@@ -1,0 +1,51 @@
+{
+  "name": "quality-scoring",
+  "category": "General",
+  "purpose": "140-point quality scoring algorithm for comprehensive evaluation of code, documentation, and artifacts.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "quality-scoring",
+    "description": "140-point quality scoring algorithm for comprehensive evaluation of code, documentation, and artifacts.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "artifact"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "artifact": {
+          "type": "object",
+          "description": "artifact parameter"
+        },
+        "benchmark": {
+          "type": "object",
+          "description": "benchmark parameter"
+        },
+        "artifact_type": {
+          "type": "string",
+          "description": "artifact_type parameter"
+        },
+        "scoring_profile": {
+          "type": "string",
+          "description": "scoring_profile parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "score": {
+        "total": "number",
+        "breakdown": "object",
+        "percentile": "number"
+      },
+      "analysis": "array",
+      "recommendations": "array"
+    }
+  }
+}

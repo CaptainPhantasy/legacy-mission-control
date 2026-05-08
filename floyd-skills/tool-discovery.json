@@ -1,0 +1,48 @@
+{
+  "name": "tool-discovery",
+  "category": "General",
+  "purpose": "Discover and recommend relevant tools based on project context, task requirements, and usage patterns.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "tool-discovery",
+    "description": "Discover and recommend relevant tools based on project context, task requirements, and usage patterns.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "context"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "context": {
+          "type": "object",
+          "description": "context parameter"
+        },
+        "max_results": {
+          "type": "number",
+          "description": "max_results parameter"
+        },
+        "include_external": {
+          "type": "boolean",
+          "description": "include_external parameter"
+        },
+        "task_description": {
+          "type": "string",
+          "description": "task_description parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "tools": "array",
+      "usage_patterns": "array",
+      "recommendations": "array",
+      "relevance_scores": "object"
+    }
+  }
+}

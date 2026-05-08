@@ -1,0 +1,51 @@
+{
+  "name": "pattern-extraction",
+  "category": "General",
+  "purpose": "Extract code patterns, idioms, and architectural patterns from codebases for reuse and standardization.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "pattern-extraction",
+    "description": "Extract code patterns, idioms, and architectural patterns from codebases for reuse and standardization.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "codebase_path"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "codebase_path": {
+          "type": "string",
+          "description": "codebase_path parameter"
+        },
+        "pattern_types": {
+          "type": "array",
+          "description": "pattern_types parameter"
+        },
+        "min_occurrences": {
+          "type": "number",
+          "description": "min_occurrences parameter"
+        },
+        "include_anti_patterns": {
+          "type": "boolean",
+          "description": "include_anti_patterns parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "patterns": "array",
+      "statistics": {
+        "coverage": "number",
+        "total_patterns": "number"
+      },
+      "anti_patterns": "array",
+      "recommendations": "array"
+    }
+  }
+}

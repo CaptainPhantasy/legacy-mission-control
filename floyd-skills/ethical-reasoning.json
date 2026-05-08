@@ -1,0 +1,52 @@
+{
+  "name": "ethical-reasoning",
+  "category": "General",
+  "purpose": "Apply ethical frameworks to decision making with stakeholder impact analysis.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "ethical-reasoning",
+    "description": "Apply ethical frameworks to decision making with stakeholder impact analysis.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "decision"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "decision": {
+          "type": "object",
+          "description": "decision parameter"
+        },
+        "stakeholders": {
+          "type": "array",
+          "description": "stakeholders parameter"
+        },
+        "ethical_frameworks": {
+          "type": "array",
+          "description": "ethical_frameworks parameter"
+        },
+        "include_alternatives": {
+          "type": "boolean",
+          "description": "include_alternatives parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "analysis": {
+        "ethical_score": "number",
+        "framework_results": "object",
+        "stakeholder_impacts": "array"
+      },
+      "alternatives": "array?",
+      "justification": "string",
+      "recommendation": "object"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "cognitive-load-analysis",
+  "category": "General",
+  "purpose": "Analyze cognitive load of tasks, interfaces, and information to optimize for human understanding.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "cognitive-load-analysis",
+    "description": "Analyze cognitive load of tasks, interfaces, and information to optimize for human understanding.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "target"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "target": {
+          "type": "object",
+          "description": "target parameter"
+        },
+        "target_type": {
+          "type": "string",
+          "description": "target_type parameter"
+        },
+        "user_profile": {
+          "type": "object",
+          "description": "user_profile parameter"
+        },
+        "optimization_goal": {
+          "type": "string",
+          "description": "optimization_goal parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "analysis": {
+        "breakdown": "object",
+        "total_load": "number",
+        "bottlenecks": "array"
+      },
+      "recommendations": "array",
+      "optimized_version": "object?"
+    }
+  }
+}

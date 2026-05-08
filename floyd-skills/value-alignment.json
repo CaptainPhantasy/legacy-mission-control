@@ -1,0 +1,50 @@
+{
+  "name": "value-alignment",
+  "category": "General",
+  "purpose": "Ensure agent behavior aligns with specified values and ethical principles.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "value-alignment",
+    "description": "Ensure agent behavior aligns with specified values and ethical principles.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "values": {
+          "type": "array",
+          "description": "values parameter"
+        },
+        "behavior": {
+          "type": "object",
+          "description": "behavior parameter"
+        },
+        "enforcement_level": {
+          "type": "string",
+          "description": "enforcement_level parameter"
+        },
+        "training_examples": {
+          "type": "array",
+          "description": "training_examples parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "alignment": {
+        "score": "number",
+        "violations": "array",
+        "exemplary_actions": "array"
+      },
+      "training_result": "object?",
+      "enforcement_actions": "array"
+    }
+  }
+}

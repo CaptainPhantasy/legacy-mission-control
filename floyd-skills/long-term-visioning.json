@@ -1,0 +1,55 @@
+{
+  "name": "long-term-visioning",
+  "category": "General",
+  "purpose": "Develop and maintain long-term visions with scenario planning and trend analysis.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "long-term-visioning",
+    "description": "Develop and maintain long-term visions with scenario planning and trend analysis.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "trends": {
+          "type": "array",
+          "description": "trends parameter"
+        },
+        "time_horizon": {
+          "type": "number",
+          "description": "time_horizon parameter"
+        },
+        "current_vision": {
+          "type": "object",
+          "description": "current_vision parameter"
+        },
+        "scenario_count": {
+          "type": "number",
+          "description": "scenario_count parameter"
+        },
+        "uncertainty_factors": {
+          "type": "array",
+          "description": "uncertainty_factors parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "vision": {
+        "goals": "array",
+        "summary": "string",
+        "milestones": "array"
+      },
+      "scenarios": "array",
+      "risk_factors": "array",
+      "trend_analysis": "object"
+    }
+  }
+}

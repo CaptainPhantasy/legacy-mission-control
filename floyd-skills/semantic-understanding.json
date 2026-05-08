@@ -1,0 +1,52 @@
+{
+  "name": "semantic-understanding",
+  "category": "General",
+  "purpose": "Deep semantic analysis of text to extract meaning, intent, entities, and relationships.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "semantic-understanding",
+    "description": "Deep semantic analysis of text to extract meaning, intent, entities, and relationships.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "text parameter"
+        },
+        "depth": {
+          "type": "string",
+          "description": "depth parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "entity_types": {
+          "type": "array",
+          "description": "entity_types parameter"
+        },
+        "include_sentiment": {
+          "type": "boolean",
+          "description": "include_sentiment parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "semantics": {
+        "intent": "string",
+        "themes": "array",
+        "entities": "array",
+        "relationships": "array"
+      },
+      "sentiment": "object?",
+      "confidence": "number"
+    }
+  }
+}

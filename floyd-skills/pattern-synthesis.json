@@ -1,0 +1,47 @@
+{
+  "name": "pattern-synthesis",
+  "category": "General",
+  "purpose": "Synthesize new patterns from existing patterns through combination, abstraction, and generalization.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "pattern-synthesis",
+    "description": "Synthesize new patterns from existing patterns through combination, abstraction, and generalization.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "patterns"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "patterns": {
+          "type": "array",
+          "description": "patterns parameter"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "constraints parameter"
+        },
+        "synthesis_method": {
+          "type": "string",
+          "description": "synthesis_method parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "derivation_tree": "object",
+      "quality_metrics": {
+        "novelty": "number",
+        "validity": "number",
+        "usefulness": "number"
+      },
+      "synthesized_patterns": "array"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "viterbi-resolver",
+  "category": "Ghost Algorithm",
+  "purpose": "Resolves ambiguous or 'fuzzy' agent output by calculating the maximum-likelihood correct token sequence.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Hidden Markov Model / Viterbi Algorithm",
+    "hook": "LAIAS.post_generation_recovery",
+    "name": "viterbi-resolver",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Uses Hidden Markov Models to resolve ambiguous/fuzzy code output into the most probable correct syntax.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "ambiguous_code"
+      ],
+      "properties": {
+        "ambiguous_code": {
+          "type": "string"
+        },
+        "transition_matrix": {
+          "type": "object",
+          "description": "Probabilistic token sequence map from codebase"
+        }
+      }
+    },
+    "outputSchema": {
+      "confidence_score": "number",
+      "most_probable_fix": "string"
+    }
+  }
+}

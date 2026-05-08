@@ -1,0 +1,51 @@
+{
+  "name": "context-scalability-analysis",
+  "category": "General",
+  "purpose": "Analyze how context handling scales with increasing complexity and volume.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-scalability-analysis",
+    "description": "Analyze how context handling scales with increasing complexity and volume.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "current_context"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "current_context": {
+          "type": "object",
+          "description": "current_context parameter"
+        },
+        "growth_scenarios": {
+          "type": "array",
+          "description": "growth_scenarios parameter"
+        },
+        "bottleneck_detection": {
+          "type": "boolean",
+          "description": "bottleneck_detection parameter"
+        },
+        "optimization_targets": {
+          "type": "array",
+          "description": "optimization_targets parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "analysis": {
+        "bottlenecks": "array",
+        "scaling_factor": "number",
+        "current_capacity": "number"
+      },
+      "projections": "array",
+      "recommendations": "array"
+    }
+  }
+}

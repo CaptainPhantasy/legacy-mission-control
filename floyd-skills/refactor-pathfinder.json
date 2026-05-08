@@ -1,0 +1,44 @@
+{
+  "name": "refactor-pathfinder",
+  "category": "Ghost Algorithm",
+  "purpose": "Calculates the minimum-edit distance (shortest path) from 'Broken State' to 'Target State'.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "A* Search Algorithm",
+    "hook": "StudioUI.task_planner",
+    "name": "refactor-pathfinder",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Calculates the shortest transformation path from current to target code state using A* Search.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "start",
+        "goal"
+      ],
+      "properties": {
+        "goal": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string"
+        },
+        "heuristic": {
+          "enum": [
+            "tests",
+            "technical_debt",
+            "complexity"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "outputSchema": {
+      "step_sequence": "array",
+      "rollback_nodes": "array"
+    }
+  }
+}

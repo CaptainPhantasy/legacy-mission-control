@@ -1,0 +1,54 @@
+{
+  "name": "meta-cognitive-strategy",
+  "category": "General",
+  "purpose": "Develop and apply meta-cognitive strategies for improved reasoning and self-awareness.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "meta-cognitive-strategy",
+    "description": "Develop and apply meta-cognitive strategies for improved reasoning and self-awareness.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "problem"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "problem": {
+          "type": "object",
+          "description": "problem parameter"
+        },
+        "feedback": {
+          "type": "object",
+          "description": "feedback parameter"
+        },
+        "learning_mode": {
+          "type": "boolean",
+          "description": "learning_mode parameter"
+        },
+        "existing_strategies": {
+          "type": "array",
+          "description": "existing_strategies parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "strategy": {
+        "steps": "array",
+        "fallbacks": "array",
+        "reasoning": "string"
+      },
+      "evaluation": {
+        "learnings": "array",
+        "effectiveness": "number"
+      },
+      "application_result": "object?"
+    }
+  }
+}

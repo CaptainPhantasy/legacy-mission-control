@@ -1,0 +1,51 @@
+{
+  "name": "pattern-matching",
+  "category": "General",
+  "purpose": "Identify patterns across diverse data sources using multiple matching algorithms and confidence scoring.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "pattern-matching",
+    "description": "Identify patterns across diverse data sources using multiple matching algorithms and confidence scoring.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "pattern",
+        "data_sources"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "pattern": {
+          "type": "object",
+          "description": "pattern parameter"
+        },
+        "threshold": {
+          "type": "number",
+          "description": "threshold parameter"
+        },
+        "data_sources": {
+          "type": "array",
+          "description": "data_sources parameter"
+        },
+        "matching_algorithm": {
+          "type": "string",
+          "description": "matching_algorithm parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "matches": "array",
+      "confidence_scores": "object",
+      "pattern_statistics": {
+        "frequency": "number",
+        "distribution": "object"
+      }
+    }
+  }
+}

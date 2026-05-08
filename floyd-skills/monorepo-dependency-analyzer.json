@@ -1,0 +1,51 @@
+{
+  "name": "monorepo-dependency-analyzer",
+  "category": "General",
+  "purpose": "Analyze dependencies across monorepo packages, detect circular dependencies, and visualize the dependency graph.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "monorepo-dependency-analyzer",
+    "description": "Analyze dependencies across monorepo packages, detect circular dependencies, and visualize the dependency graph.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "repo_path"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "max_depth": {
+          "type": "number",
+          "description": "max_depth parameter"
+        },
+        "repo_path": {
+          "type": "string",
+          "description": "repo_path parameter"
+        },
+        "packages_path": {
+          "type": "string",
+          "description": "packages_path parameter"
+        },
+        "include_dev_deps": {
+          "type": "boolean",
+          "description": "include_dev_deps parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "cycles": "array",
+      "metrics": "object",
+      "packages": "array",
+      "dependency_graph": {
+        "edges": "array",
+        "nodes": "array"
+      }
+    }
+  }
+}

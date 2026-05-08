@@ -1,0 +1,54 @@
+{
+  "name": "typescript-semantic-analyzer",
+  "category": "General",
+  "purpose": "Perform deep semantic analysis of TypeScript code including symbol extraction, type inference, and reference tracking across projects.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "typescript-semantic-analyzer",
+    "description": "Perform deep semantic analysis of TypeScript code including symbol extraction, type inference, and reference tracking across projects.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "file_path"
+      ],
+      "properties": {
+        "depth": {
+          "type": "number",
+          "description": "depth parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "file_path": {
+          "type": "string",
+          "description": "file_path parameter"
+        },
+        "project_path": {
+          "type": "string",
+          "description": "project_path parameter"
+        },
+        "include_types": {
+          "type": "boolean",
+          "description": "include_types parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "metrics": {
+        "total_symbols": "number",
+        "type_coverage": "number",
+        "complexity_score": "number"
+      },
+      "analysis": {
+        "imports": "array",
+        "symbols": "array",
+        "type_definitions": "array"
+      }
+    }
+  }
+}

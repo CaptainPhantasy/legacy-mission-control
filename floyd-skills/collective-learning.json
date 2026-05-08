@@ -1,0 +1,50 @@
+{
+  "name": "collective-learning",
+  "category": "General",
+  "purpose": "Coordinate learning across multiple agents with knowledge aggregation and transfer.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "collective-learning",
+    "description": "Coordinate learning across multiple agents with knowledge aggregation and transfer.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "learning_data": {
+          "type": "object",
+          "description": "learning_data parameter"
+        },
+        "privacy_level": {
+          "type": "string",
+          "description": "privacy_level parameter"
+        },
+        "aggregation_method": {
+          "type": "string",
+          "description": "aggregation_method parameter"
+        },
+        "participating_agents": {
+          "type": "array",
+          "description": "participating_agents parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "learning_result": {
+        "contributors": "array",
+        "model_update": "object",
+        "quality_score": "number"
+      },
+      "recommendations": "array",
+      "transfer_report": "object"
+    }
+  }
+}

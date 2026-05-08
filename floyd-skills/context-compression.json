@@ -1,0 +1,48 @@
+{
+  "name": "context-compression",
+  "category": "General",
+  "purpose": "Compress context while preserving semantic meaning using abstractive and extractive techniques.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-compression",
+    "description": "Compress context while preserving semantic meaning using abstractive and extractive techniques.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "context"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "context": {
+          "type": "string",
+          "description": "context parameter"
+        },
+        "target_ratio": {
+          "type": "number",
+          "description": "target_ratio parameter"
+        },
+        "preserve_keywords": {
+          "type": "array",
+          "description": "preserve_keywords parameter"
+        },
+        "compression_method": {
+          "type": "string",
+          "description": "compression_method parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "compressed": "string",
+      "information_loss": "number",
+      "compression_ratio": "number",
+      "preserved_concepts": "array"
+    }
+  }
+}

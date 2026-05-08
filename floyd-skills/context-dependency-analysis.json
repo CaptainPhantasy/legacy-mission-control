@@ -1,0 +1,52 @@
+{
+  "name": "context-dependency-analysis",
+  "category": "General",
+  "purpose": "Analyze dependencies between context elements to understand information flow and requirements.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-dependency-analysis",
+    "description": "Analyze dependencies between context elements to understand information flow and requirements.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "context_elements"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "root_element": {
+          "type": "string",
+          "description": "root_element parameter"
+        },
+        "context_elements": {
+          "type": "array",
+          "description": "context_elements parameter"
+        },
+        "dependency_types": {
+          "type": "array",
+          "description": "dependency_types parameter"
+        },
+        "include_transitive": {
+          "type": "boolean",
+          "description": "include_transitive parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "graph": "object",
+      "dependencies": {
+        "direct": "array",
+        "circular": "array",
+        "transitive": "array"
+      },
+      "critical_path": "array",
+      "recommendations": "array"
+    }
+  }
+}

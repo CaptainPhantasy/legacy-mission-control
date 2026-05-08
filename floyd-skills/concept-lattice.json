@@ -1,0 +1,38 @@
+{
+  "name": "concept-lattice",
+  "category": "Ghost Algorithm",
+  "purpose": "Maps hidden architectural relationships and abstractions that standard ASTs miss.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Formal Concept Analysis (FCA)",
+    "hook": "LAIAS.context_builder",
+    "name": "concept-lattice",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Formal Concept Analysis (FCA) tool. Maps hidden architectural relationships between types and functions.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "ast_data"
+      ],
+      "properties": {
+        "ast_data": {
+          "type": "object"
+        },
+        "attribute_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "outputSchema": {
+      "lattice_map": "object",
+      "abstraction_candidates": "array"
+    }
+  }
+}

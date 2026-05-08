@@ -1,0 +1,38 @@
+{
+  "name": "grammar-gate",
+  "category": "Ghost Algorithm",
+  "purpose": "Microsecond validation of generated code against project-specific context-free grammars (React hooks, async patterns).",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Earley Parser (1968)",
+    "hook": "LAIAS.agent_output_validator",
+    "name": "grammar-gate",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Validates agent-generated code against an Earley Parser. Checks structural/convention violations in microseconds.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "code",
+        "grammar_rules"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "grammar_rules": {
+          "type": "object",
+          "description": "JSON representation of project conventions"
+        }
+      }
+    },
+    "outputSchema": {
+      "isValid": "boolean",
+      "suggested_fix": "string",
+      "violation_details": "array"
+    }
+  }
+}

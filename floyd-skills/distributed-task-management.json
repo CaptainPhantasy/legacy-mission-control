@@ -1,0 +1,51 @@
+{
+  "name": "distributed-task-management",
+  "category": "General",
+  "purpose": "Manage and coordinate tasks across distributed agents with load balancing and fault tolerance.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "distributed-task-management",
+    "description": "Manage and coordinate tasks across distributed agents with load balancing and fault tolerance.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "task": {
+          "type": "object",
+          "description": "task parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "task_id": {
+          "type": "string",
+          "description": "task_id parameter"
+        },
+        "timeout": {
+          "type": "number",
+          "description": "timeout parameter"
+        },
+        "distribution_strategy": {
+          "type": "string",
+          "description": "distribution_strategy parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "metrics": "object",
+      "task_status": {
+        "id": "string",
+        "state": "string",
+        "progress": "number",
+        "assigned_agent": "string"
+      },
+      "queue_status": "object"
+    }
+  }
+}

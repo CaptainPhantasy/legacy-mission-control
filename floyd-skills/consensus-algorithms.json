@@ -1,0 +1,487 @@
+{
+  "name": "consensus-algorithms",
+  "category": "reasoning.consensus.decision-making",
+  "purpose": "Systematic approaches to achieving agreement among multiple agents, entities, or decision-makers through structured protocols that handle conflicts, preferences, and requirements for fair and reliable outcomes. This skill implements mathematically sound voting algorithms with configurable consensus ",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://consensus-algorithms/input/v2",
+      "type": "object",
+      "title": "Consensus Algorithms Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "issue",
+        "preferences"
+      ],
+      "properties": {
+        "issue": {
+          "type": "object",
+          "required": [
+            "title",
+            "options",
+            "participants",
+            "consensus_type"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "examples": [
+                "Choose backend framework",
+                "Approve RFC-0042"
+              ],
+              "maxLength": 200,
+              "minLength": 1,
+              "description": "Clear, concise title of the decision"
+            },
+            "quorum": {
+              "type": "number",
+              "default": 0.5,
+              "maximum": 1,
+              "minimum": 0,
+              "examples": [
+                0.75
+              ],
+              "description": "Minimum participation required (0.0-1.0)"
+            },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              "examples": [
+                [
+                  "Express",
+                  "FastAPI",
+                  "Django",
+                  "Spring Boot"
+                ]
+              ],
+              "maxItems": 100,
+              "minItems": 2,
+              "description": "Available choices (must be unique)",
+              "uniqueItems": true
+            },
+            "weights": {
+              "type": "object",
+              "examples": [
+                {
+                  "bob": 1.5,
+                  "alice": 1,
+                  "carol": 1
+                }
+              ],
+              "description": "Voting weights per participant (default: 1.0 for all)",
+              "additionalProperties": {
+                "type": "number",
+                "maximum": 100,
+                "minimum": 0,
+                "description": "Weight value (0 = no voting power, 100 = max influence)"
+              }
+            },
+            "deadline": {
+              "type": "string",
+              "format": "date-time",
+              "examples": [
+                "2026-02-28T17:00:00Z"
+              ],
+              "description": "Decision deadline (ISO 8601 format)"
+            },
+            "threshold": {
+              "type": "number",
+              "default": 0.5,
+              "maximum": 1,
+              "minimum": 0,
+              "examples": [
+                0.66,
+                0.75
+              ],
+              "description": "Agreement threshold (0.0-1.0). Required for supermajority/weighted."
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 5000,
+              "description": "Detailed context and criteria for the decision"
+            },
+            "participants": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9_-]+$",
+                "maxLength": 100,
+                "minLength": 1
+              },
+              "examples": [
+                [
+                  "alice",
+                  "bob",
+                  "carol"
+                ]
+              ],
+              "maxItems": 1000,
+              "minItems": 2,
+              "description": "List of participant identifiers (must be unique)",
+              "uniqueItems": true
+            },
+            "consensus_type": {
+              "enum": [
+                "unanimous",
+                "majority",
+                "supermajority",
+                "weighted_majority",
+                "approval",
+                "borda_count",
+                "condorcet"
+              ],
+              "type": "string",
+              "examples": [
+                "weighted_majority"
+              ],
+              "description": "Type of consensus algorithm to use"
+            }
+          },
+          "description": "The decision problem definition",
+          "additionalProperties": false
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "examples": [
+            [
+              "performance",
+              "team_expertise",
+              "maintenance"
+            ]
+          ],
+          "maxItems": 20,
+          "description": "Evaluation criteria for documentation"
+        },
+        "preferences": {
+          "type": "object",
+          "description": "Participant preferences keyed by participant ID",
+          "minProperties": 2,
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "rank"
+                ],
+                "properties": {
+                  "rank": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "description": "Options ranked from most to least preferred"
+                  },
+                  "reasoning": {
+                    "type": "string",
+                    "maxLength": 2000,
+                    "description": "Explanation for preference (for audit trail)"
+                  },
+                  "confidence": {
+                    "type": "number",
+                    "default": 1,
+                    "maximum": 1,
+                    "minimum": 0,
+                    "description": "Confidence in preference (0.0-1.0)"
+                  }
+                },
+                "description": "Ranked preference",
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "required": [
+                  "abstain"
+                ],
+                "properties": {
+                  "reason": {
+                    "type": "string",
+                    "maxLength": 500,
+                    "description": "Reason for abstention (required for audit)"
+                  },
+                  "abstain": {
+                    "type": "boolean",
+                    "const": true
+                  }
+                },
+                "description": "Abstention",
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "algorithm_options": {
+          "type": "object",
+          "properties": {
+            "allow_veto": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether any participant can veto the decision"
+            },
+            "tie_breaker": {
+              "enum": [
+                "random",
+                "seniority",
+                "alphabetical",
+                "further_deliberation",
+                "no_decision"
+              ],
+              "type": "string",
+              "default": "further_deliberation",
+              "description": "Strategy when votes are tied"
+            },
+            "anonymous_output": {
+              "type": "boolean",
+              "default": false,
+              "description": "Anonymize individual votes in output"
+            },
+            "veto_participants": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Participants with veto power (only if allow_veto=true)"
+            },
+            "include_audit_trail": {
+              "type": "boolean",
+              "default": true,
+              "description": "Include full audit trail in output"
+            }
+          },
+          "description": "Additional algorithm configuration",
+          "additionalProperties": false
+        }
+      },
+      "description": "Input for consensus-based decision making with multiple participants",
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://consensus-algorithms/output/v2",
+      "type": "object",
+      "title": "Consensus Algorithms Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "consensus_result",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether consensus process completed successfully"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "input_hash": {
+              "type": "string"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "audit_trail": {
+          "type": "object",
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "input_hash": {
+              "type": "string"
+            },
+            "algorithm_version": {
+              "type": "string"
+            },
+            "participant_votes": {
+              "type": "array"
+            }
+          }
+        },
+        "consensus_result": {
+          "type": "object",
+          "required": [
+            "decision",
+            "consensus_type",
+            "threshold_met",
+            "agreement_score",
+            "decision_strength"
+          ],
+          "properties": {
+            "margin": {
+              "type": "number",
+              "description": "Score difference between winner and runner-up"
+            },
+            "decision": {
+              "type": "string",
+              "description": "The winning option (or null if no consensus)"
+            },
+            "confidence": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Weighted average confidence of participants"
+            },
+            "deadline_met": {
+              "type": "boolean",
+              "description": "Whether decision was made before deadline"
+            },
+            "threshold_met": {
+              "type": "boolean",
+              "description": "Whether required threshold was achieved"
+            },
+            "consensus_type": {
+              "type": "string",
+              "description": "Algorithm used"
+            },
+            "agreement_score": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Overall agreement level (0-1)"
+            },
+            "decision_strength": {
+              "enum": [
+                "unanimous",
+                "strong",
+                "moderate",
+                "weak",
+                "no_consensus"
+              ],
+              "type": "string",
+              "description": "Qualitative strength assessment"
+            }
+          }
+        },
+        "conflict_analysis": {
+          "type": "object",
+          "properties": {
+            "has_conflicts": {
+              "type": "boolean"
+            },
+            "conflict_areas": {
+              "type": "array"
+            },
+            "compromise_suggestions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "detailed_analysis": {
+          "type": "object",
+          "properties": {
+            "ranking": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "integer"
+                  },
+                  "score": {
+                    "type": "number"
+                  },
+                  "option": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "algorithm_used": {
+              "type": "string"
+            },
+            "cohesion_score": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0
+            },
+            "weighted_scores": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "agreement_matrix": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            },
+            "polarization_index": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0
+            }
+          }
+        },
+        "participation_analysis": {
+          "type": "object",
+          "properties": {
+            "quorum_met": {
+              "type": "boolean"
+            },
+            "abstentions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string"
+                  },
+                  "participant": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "total_weight": {
+              "type": "number"
+            },
+            "quorum_margin": {
+              "type": "number"
+            },
+            "quorum_required": {
+              "type": "number"
+            },
+            "average_confidence": {
+              "type": "number"
+            },
+            "participation_rate": {
+              "type": "number"
+            },
+            "participating_weight": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

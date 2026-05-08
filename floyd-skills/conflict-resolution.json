@@ -1,0 +1,51 @@
+{
+  "name": "conflict-resolution",
+  "category": "General",
+  "purpose": "Detect and resolve conflicts between agents, resources, and objectives.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "conflict-resolution",
+    "description": "Detect and resolve conflicts between agents, resources, and objectives.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "context"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "context": {
+          "type": "object",
+          "description": "context parameter"
+        },
+        "conflict_id": {
+          "type": "string",
+          "description": "conflict_id parameter"
+        },
+        "prevent_future": {
+          "type": "boolean",
+          "description": "prevent_future parameter"
+        },
+        "resolution_strategy": {
+          "type": "string",
+          "description": "resolution_strategy parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "conflicts": "array",
+      "resolution": {
+        "outcome": "object",
+        "strategy_used": "string",
+        "affected_parties": "array"
+      },
+      "prevention_rules": "array?"
+    }
+  }
+}

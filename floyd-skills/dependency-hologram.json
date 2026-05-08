@@ -1,0 +1,55 @@
+{
+  "name": "dependency-hologram",
+  "category": "General",
+  "purpose": "Generate interactive 2D/3D dependency visualizations for complex project architectures.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "dependency-hologram",
+    "description": "Generate interactive 2D/3D dependency visualizations for complex project architectures.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "project_path"
+      ],
+      "properties": {
+        "depth": {
+          "type": "number",
+          "description": "depth parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "project_path": {
+          "type": "string",
+          "description": "project_path parameter"
+        },
+        "include_dev_deps": {
+          "type": "boolean",
+          "description": "include_dev_deps parameter"
+        },
+        "visualization_type": {
+          "type": "string",
+          "description": "visualization_type parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "metrics": {
+        "modularity": "number",
+        "total_edges": "number",
+        "total_nodes": "number"
+      },
+      "hologram": {
+        "edges": "array",
+        "nodes": "array",
+        "clusters": "array"
+      },
+      "svg_data": "string?"
+    }
+  }
+}

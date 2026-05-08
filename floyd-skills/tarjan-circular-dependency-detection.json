@@ -1,0 +1,401 @@
+{
+  "name": "tarjan-circular-dependency-detection",
+  "category": "analysis.algorithms.graph-theory",
+  "purpose": "Detect circular dependencies in codebases using Tarjan's Strongly Connected Components (SCC) algorithm. Identifies problematic import cycles that cause infinite loops, memory leaks, and initialization issues, providing detailed import chains and actionable resolution strategies.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://tarjan-circular-dependency-detection/input/v2",
+      "type": "object",
+      "title": "Tarjan Circular Dependency Detection Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "enum": [
+            "analyze",
+            "visualize",
+            "find_cycles",
+            "suggest_fixes"
+          ],
+          "type": "string",
+          "description": "Operation to perform"
+        },
+        "language": {
+          "enum": [
+            "typescript",
+            "javascript",
+            "python",
+            "go",
+            "auto"
+          ],
+          "type": "string",
+          "default": "auto"
+        },
+        "entry_point": {
+          "type": "string",
+          "description": "Starting file for analysis"
+        },
+        "project_path": {
+          "type": "string",
+          "default": ".",
+          "description": "Root directory to analyze"
+        },
+        "analysis_options": {
+          "type": "object",
+          "properties": {
+            "max_depth": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1
+            },
+            "exclude_patterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                "node_modules",
+                ".git",
+                "dist",
+                "build"
+              ]
+            },
+            "include_dev_deps": {
+              "type": "boolean",
+              "default": false
+            },
+            "include_node_modules": {
+              "type": "boolean",
+              "default": false
+            },
+            "include_dynamic_imports": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "import_resolution": {
+          "type": "object",
+          "properties": {
+            "root_dir": {
+              "type": "string",
+              "default": "./src"
+            },
+            "extensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx"
+              ]
+            },
+            "alias_config": {
+              "type": "object",
+              "description": "Path aliases (e.g., {'@app/*': ['src/*']})",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "visualization_options": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "dot",
+                "mermaid",
+                "svg",
+                "json",
+                "ascii"
+              ],
+              "type": "string",
+              "default": "mermaid"
+            },
+            "max_nodes": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 500,
+              "minimum": 10
+            },
+            "highlight_cycles": {
+              "type": "boolean",
+              "default": true
+            },
+            "include_all_nodes": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://tarjan-circular-dependency-detection/output/v2",
+      "type": "object",
+      "title": "Tarjan Circular Dependency Detection Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "analysis",
+        "metadata"
+      ],
+      "properties": {
+        "cycles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "nodes",
+              "strength",
+              "risk"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "risk": {
+                "enum": [
+                  "low",
+                  "medium",
+                  "high",
+                  "critical"
+                ],
+                "type": "string"
+              },
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "strength": {
+                "type": "integer",
+                "description": "Number of edges in cycle"
+              },
+              "cycle_type": {
+                "enum": [
+                  "direct",
+                  "indirect",
+                  "self"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "import_chain": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "to_file": {
+                      "type": "string"
+                    },
+                    "from_file": {
+                      "type": "string"
+                    },
+                    "import_type": {
+                      "enum": [
+                        "static",
+                        "dynamic",
+                        "re-export"
+                      ],
+                      "type": "string"
+                    },
+                    "line_number": {
+                      "type": "integer"
+                    },
+                    "import_statement": {
+                      "type": "string"
+                    },
+                    "symbols_imported": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "breaking_suggestions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "effort": {
+                      "enum": [
+                        "low",
+                        "medium",
+                        "high"
+                      ],
+                      "type": "string"
+                    },
+                    "example": {
+                      "type": "string"
+                    },
+                    "strategy": {
+                      "enum": [
+                        "extract_interface",
+                        "dependency_injection",
+                        "lazy_loading",
+                        "merge_modules",
+                        "event_driven"
+                      ],
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "cycles_found": {
+              "type": "integer"
+            },
+            "overall_health": {
+              "enum": [
+                "excellent",
+                "good",
+                "moderate",
+                "poor",
+                "critical"
+              ],
+              "type": "string"
+            },
+            "nodes_in_cycles": {
+              "type": "integer"
+            },
+            "cycle_complexity": {
+              "type": "number"
+            },
+            "largest_cycle_size": {
+              "type": "integer"
+            }
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "analysis": {
+          "type": "object",
+          "properties": {
+            "total_files": {
+              "type": "integer"
+            },
+            "total_imports": {
+              "type": "integer"
+            },
+            "dependency_graph": {
+              "type": "object",
+              "properties": {
+                "edges": {
+                  "type": "integer"
+                },
+                "nodes": {
+                  "type": "integer"
+                },
+                "density": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "language": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "priority": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ],
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "affected_files": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "project_path": {
+          "type": "string"
+        },
+        "visualization": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "type": "string"
+            },
+            "content": {
+              "type": "string"
+            },
+            "file_path": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

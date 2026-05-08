@@ -1,0 +1,51 @@
+{
+  "name": "api-format-verifier",
+  "category": "General",
+  "purpose": "Verify API specifications against OpenAPI/Swagger/RAML standards with compliance scoring and format conversion.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "api-format-verifier",
+    "description": "Verify API specifications against OpenAPI/Swagger/RAML standards with compliance scoring and format conversion.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "api_spec"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "api_spec": {
+          "type": "object",
+          "description": "api_spec parameter"
+        },
+        "target_format": {
+          "type": "string",
+          "description": "target_format parameter"
+        },
+        "compliance_level": {
+          "type": "string",
+          "description": "compliance_level parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "compliance": {
+        "score": "number",
+        "missing_fields": "array",
+        "deprecated_features": "array"
+      },
+      "conversion": "object?",
+      "validation": {
+        "errors": "array",
+        "is_valid": "boolean",
+        "format_detected": "string"
+      }
+    }
+  }
+}

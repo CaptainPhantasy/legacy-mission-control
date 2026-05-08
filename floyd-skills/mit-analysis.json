@@ -1,0 +1,47 @@
+{
+  "name": "mit-analysis",
+  "category": "General",
+  "purpose": "Multiple Instance Theory analysis for understanding complex problem spaces with multiple valid interpretations.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "mit-analysis",
+    "description": "Multiple Instance Theory analysis for understanding complex problem spaces with multiple valid interpretations.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "problem_space"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "instances": {
+          "type": "array",
+          "description": "instances parameter"
+        },
+        "problem_space": {
+          "type": "object",
+          "description": "problem_space parameter"
+        },
+        "aggregation_method": {
+          "type": "string",
+          "description": "aggregation_method parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "analysis": {
+        "conflicts": "array",
+        "instances": "array",
+        "consensus_points": "array"
+      },
+      "synthesis": "object",
+      "confidence": "number"
+    }
+  }
+}

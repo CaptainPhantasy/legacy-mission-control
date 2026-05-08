@@ -1,0 +1,47 @@
+{
+  "name": "build-error-correlator",
+  "category": "General",
+  "purpose": "Correlate build errors across multiple builds to identify patterns, recurring issues, and suggest automated fixes.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "build-error-correlator",
+    "description": "Correlate build errors across multiple builds to identify patterns, recurring issues, and suggest automated fixes.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "build_logs"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "build_logs": {
+          "type": "array",
+          "description": "build_logs parameter"
+        },
+        "previous_build": {
+          "type": "object",
+          "description": "previous_build parameter"
+        },
+        "correlation_threshold": {
+          "type": "number",
+          "description": "correlation_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "trends": {
+        "new_errors": "number",
+        "resolved_errors": "number",
+        "recurring_errors": "number"
+      },
+      "correlations": "array",
+      "recommendations": "array"
+    }
+  }
+}

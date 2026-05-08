@@ -1,0 +1,133 @@
+{
+  "total": 73,
+  "categories": {
+    "General": {
+      "count": 54,
+      "skills": [
+        "adaptive-behavior",
+        "adaptive-strategy",
+        "agent-communication",
+        "api-format-verifier",
+        "attention-allocation",
+        "benchmark-runner",
+        "build-error-correlator",
+        "cognitive-load-analysis",
+        "collective-decision-making",
+        "collective-learning",
+        "concept-crystallization",
+        "concept-web-analysis",
+        "conflict-resolution",
+        "consensus-protocol",
+        "context-compression",
+        "context-dependency-analysis",
+        "context-orchestration",
+        "context-packing",
+        "context-persistence",
+        "context-scalability-analysis",
+        "dependency-hologram",
+        "distributed-task-management",
+        "emergent-intelligence",
+        "ethical-reasoning",
+        "failure-to-test-transmuter",
+        "git-bisect",
+        "goal-alignment",
+        "knowledge-graph-building",
+        "knowledge-sharing",
+        "knowledge-synthesis",
+        "lab-inventory",
+        "long-term-visioning",
+        "meta-cognitive-strategy",
+        "meta-reasoning",
+        "mit-analysis",
+        "monorepo-dependency-analyzer",
+        "pattern-extraction",
+        "pattern-matching",
+        "pattern-synthesis",
+        "quality-scoring",
+        "resource-allocation",
+        "role-assignment",
+        "schema-migrator",
+        "secure-hook-executor",
+        "self-organization",
+        "self-reflection",
+        "semantic-understanding",
+        "strategic-planning",
+        "swarm-intelligence",
+        "synchronization",
+        "tool-discovery",
+        "trace-replay-debugger",
+        "typescript-semantic-analyzer",
+        "value-alignment"
+      ]
+    },
+    "Ghost Algorithm": {
+      "count": 10,
+      "skills": [
+        "bloom-sentinel",
+        "clone-lens",
+        "concept-lattice",
+        "consensus-voter",
+        "grammar-gate",
+        "merge-engine",
+        "patch-oracle",
+        "refactor-pathfinder",
+        "token-alchemist",
+        "viterbi-resolver"
+      ]
+    },
+    "analysis.algorithms.graph-theory": {
+      "count": 1,
+      "skills": [
+        "tarjan-circular-dependency-detection"
+      ]
+    },
+    "analysis.algorithms.performance": {
+      "count": 1,
+      "skills": [
+        "statistical-performance-benchmarking"
+      ]
+    },
+    "analysis.code-validation.semantic": {
+      "count": 1,
+      "skills": [
+        "semantic-diff-validation"
+      ]
+    },
+    "analysis.performance.optimization": {
+      "count": 1,
+      "skills": [
+        "performance-profiling-patterns"
+      ]
+    },
+    "patterns.testing.automated-generation": {
+      "count": 1,
+      "skills": [
+        "test-generation-patterns"
+      ]
+    },
+    "patterns.validation.api-compatibility": {
+      "count": 1,
+      "skills": [
+        "api-contract-validation"
+      ]
+    },
+    "reasoning.analogy.pattern-matching": {
+      "count": 1,
+      "skills": [
+        "analogy-synthesis"
+      ]
+    },
+    "reasoning.consensus.decision-making": {
+      "count": 1,
+      "skills": [
+        "consensus-algorithms"
+      ]
+    },
+    "workflows.code-review.quality-assurance": {
+      "count": 1,
+      "skills": [
+        "code-review-workflow"
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "knowledge-graph-building",
+  "category": "General",
+  "purpose": "Build and evolve knowledge graphs from unstructured data with entity extraction and relationship inference.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "knowledge-graph-building",
+    "description": "Build and evolve knowledge graphs from unstructured data with entity extraction and relationship inference.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "query parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "data_sources": {
+          "type": "array",
+          "description": "data_sources parameter"
+        },
+        "existing_graph": {
+          "type": "object",
+          "description": "existing_graph parameter"
+        },
+        "extraction_rules": {
+          "type": "object",
+          "description": "extraction_rules parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "graph": {
+        "entities": "array",
+        "properties": "object",
+        "relationships": "array"
+      },
+      "changes": "array",
+      "query_results": "array?"
+    }
+  }
+}

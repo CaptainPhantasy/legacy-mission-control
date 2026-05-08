@@ -1,0 +1,50 @@
+{
+  "name": "role-assignment",
+  "category": "General",
+  "purpose": "Dynamically assign and manage roles for agents based on capabilities and requirements.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "role-assignment",
+    "description": "Dynamically assign and manage roles for agents based on capabilities and requirements.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "role": {
+          "type": "object",
+          "description": "role parameter"
+        },
+        "agent": {
+          "type": "object",
+          "description": "agent parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "optimization_goal": {
+          "type": "string",
+          "description": "optimization_goal parameter"
+        },
+        "assignment_criteria": {
+          "type": "object",
+          "description": "assignment_criteria parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "assignments": {
+        "changes": "array",
+        "current": "object",
+        "unassigned_roles": "array"
+      },
+      "recommendations": "array",
+      "capability_matrix": "object"
+    }
+  }
+}

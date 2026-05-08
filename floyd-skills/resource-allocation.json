@@ -1,0 +1,50 @@
+{
+  "name": "resource-allocation",
+  "category": "General",
+  "purpose": "Optimize resource allocation across agents and tasks with constraint satisfaction.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "resource-allocation",
+    "description": "Optimize resource allocation across agents and tasks with constraint satisfaction.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "requests": {
+          "type": "array",
+          "description": "requests parameter"
+        },
+        "resources": {
+          "type": "array",
+          "description": "resources parameter"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "constraints parameter"
+        },
+        "optimization_goal": {
+          "type": "string",
+          "description": "optimization_goal parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "allocation": {
+        "assignments": "object",
+        "utilization": "object",
+        "unmet_requests": "array"
+      },
+      "recommendations": "array",
+      "optimization_score": "number"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "adaptive-strategy",
+  "category": "General",
+  "purpose": "Develop strategies that adapt to changing conditions with trigger-based pivots.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "adaptive-strategy",
+    "description": "Develop strategies that adapt to changing conditions with trigger-based pivots.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "base_strategy": {
+          "type": "object",
+          "description": "base_strategy parameter"
+        },
+        "pivot_options": {
+          "type": "array",
+          "description": "pivot_options parameter"
+        },
+        "environment_state": {
+          "type": "object",
+          "description": "environment_state parameter"
+        },
+        "adaptation_triggers": {
+          "type": "array",
+          "description": "adaptation_triggers parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "strategy": {
+        "current": "object",
+        "adaptations": "array",
+        "triggers_active": "array"
+      },
+      "monitoring_status": "object",
+      "recommended_pivots": "array"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "emergent-intelligence",
+  "category": "General",
+  "purpose": "Detect and nurture emergent intelligent behaviors from agent interactions.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "emergent-intelligence",
+    "description": "Detect and nurture emergent intelligent behaviors from agent interactions.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "time_window": {
+          "type": "number",
+          "description": "time_window parameter"
+        },
+        "nurture_strategy": {
+          "type": "string",
+          "description": "nurture_strategy parameter"
+        },
+        "agent_interactions": {
+          "type": "array",
+          "description": "agent_interactions parameter"
+        },
+        "detection_threshold": {
+          "type": "number",
+          "description": "detection_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "recommendations": "array",
+      "emergent_patterns": "array",
+      "intelligence_metrics": {
+        "novelty": "number",
+        "complexity": "number",
+        "usefulness": "number"
+      }
+    }
+  }
+}

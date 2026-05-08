@@ -1,0 +1,50 @@
+{
+  "name": "swarm-intelligence",
+  "category": "General",
+  "purpose": "Coordinate swarm-based problem solving with emergent behavior and collective optimization.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "swarm-intelligence",
+    "description": "Coordinate swarm-based problem solving with emergent behavior and collective optimization.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "problem": {
+          "type": "object",
+          "description": "problem parameter"
+        },
+        "swarm_size": {
+          "type": "number",
+          "description": "swarm_size parameter"
+        },
+        "iteration_limit": {
+          "type": "number",
+          "description": "iteration_limit parameter"
+        },
+        "convergence_threshold": {
+          "type": "number",
+          "description": "convergence_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "swarm_state": {
+        "iteration": "number",
+        "convergence": "number",
+        "best_solution": "object"
+      },
+      "particle_states": "array",
+      "optimization_history": "array"
+    }
+  }
+}

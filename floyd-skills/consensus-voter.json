@@ -1,0 +1,39 @@
+{
+  "name": "consensus-voter",
+  "category": "Ghost Algorithm",
+  "purpose": "Mathematically identifies and discards 'hallucinating' agents (outliers) in a multi-model run.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Byzantine Fault Tolerance (BFT) + Condorcet Ranking",
+    "hook": "BroworkManager.aggregator",
+    "name": "consensus-voter",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Byzantine Fault Tolerance voter. Identifies and discards hallucinating 'Byzantine' agent outputs.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "outputs"
+      ],
+      "properties": {
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 3
+        },
+        "weights": {
+          "type": "object"
+        }
+      }
+    },
+    "outputSchema": {
+      "winner_content": "string",
+      "byzantine_node_id": "string"
+    }
+  }
+}

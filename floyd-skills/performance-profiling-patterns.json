@@ -1,0 +1,603 @@
+{
+  "name": "performance-profiling-patterns",
+  "category": "analysis.performance.optimization",
+  "purpose": "Systematically identify performance bottlenecks, analyze execution patterns, and provide actionable optimization insights through structured profiling methodologies. Covers CPU, memory, I/O, and concurrency analysis with prioritized remediation plans.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://performance-profiling-patterns/input/v2",
+      "type": "object",
+      "title": "Performance Profiling Patterns Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "target"
+      ],
+      "properties": {
+        "target": {
+          "type": "object",
+          "required": [
+            "type",
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 200
+            },
+            "type": {
+              "enum": [
+                "application",
+                "function",
+                "endpoint",
+                "module",
+                "service"
+              ],
+              "type": "string",
+              "description": "Type of target to profile"
+            },
+            "language": {
+              "enum": [
+                "typescript",
+                "javascript",
+                "python",
+                "java",
+                "go",
+                "rust"
+              ],
+              "type": "string"
+            },
+            "framework": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "environment": {
+              "enum": [
+                "development",
+                "staging",
+                "production"
+              ],
+              "type": "string",
+              "default": "development"
+            }
+          }
+        },
+        "profiling_scope": {
+          "type": "object",
+          "properties": {
+            "metrics": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "cpu",
+                  "memory",
+                  "io",
+                  "network",
+                  "concurrency",
+                  "all"
+                ],
+                "type": "string"
+              },
+              "default": [
+                "cpu",
+                "memory"
+              ]
+            },
+            "endpoints": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Specific endpoints to analyze"
+            },
+            "functions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Specific functions to focus on"
+            },
+            "duration_seconds": {
+              "type": "integer",
+              "default": 60,
+              "maximum": 86400,
+              "minimum": 10,
+              "description": "Profiling duration"
+            },
+            "sampling_rate_hz": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 1000,
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "analysis_options": {
+          "type": "object",
+          "properties": {
+            "include_call_graph": {
+              "type": "boolean",
+              "default": true
+            },
+            "include_flame_graph": {
+              "type": "boolean",
+              "default": true
+            },
+            "memory_leak_detection": {
+              "type": "boolean",
+              "default": true
+            },
+            "optimization_priority": {
+              "enum": [
+                "impact",
+                "effort",
+                "risk"
+              ],
+              "type": "string",
+              "default": "impact"
+            },
+            "hotspot_threshold_percent": {
+              "type": "number",
+              "default": 5,
+              "maximum": 50,
+              "minimum": 0.01,
+              "description": "Minimum % to flag as hotspot"
+            },
+            "generate_implementation_plan": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "performance_goals": {
+          "type": "object",
+          "properties": {
+            "throughput_rps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "memory_usage_mb": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "error_rate_percent": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            },
+            "response_time_p95_ms": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "response_time_p99_ms": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "cpu_utilization_percent": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://performance-profiling-patterns/output/v2",
+      "type": "object",
+      "title": "Performance Profiling Patterns Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "profiling_summary",
+        "bottleneck_analysis",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "visualizations": {
+          "type": "object",
+          "properties": {
+            "call_graph": {
+              "type": "string"
+            },
+            "flame_graph": {
+              "type": "string",
+              "description": "SVG or URL"
+            },
+            "memory_timeline": {
+              "type": "string"
+            },
+            "latency_histogram": {
+              "type": "string"
+            }
+          }
+        },
+        "profiling_summary": {
+          "type": "object",
+          "properties": {
+            "total_samples": {
+              "type": "integer"
+            },
+            "overall_health": {
+              "enum": [
+                "excellent",
+                "good",
+                "moderate",
+                "poor",
+                "critical"
+              ],
+              "type": "string"
+            },
+            "total_requests": {
+              "type": "integer"
+            },
+            "performance_vs_goals": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "goal": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "enum": [
+                      "meets",
+                      "exceeds",
+                      "below"
+                    ],
+                    "type": "string"
+                  },
+                  "measured": {
+                    "type": "number"
+                  },
+                  "gap_percent": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "duration_analyzed_seconds": {
+              "type": "integer"
+            }
+          }
+        },
+        "bottleneck_analysis": {
+          "type": "object",
+          "properties": {
+            "cpu_hotspots": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string"
+                  },
+                  "line": {
+                    "type": "integer"
+                  },
+                  "function": {
+                    "type": "string"
+                  },
+                  "call_count": {
+                    "type": "integer"
+                  },
+                  "percentage": {
+                    "type": "number"
+                  },
+                  "self_time_ms": {
+                    "type": "number"
+                  },
+                  "total_time_ms": {
+                    "type": "number"
+                  },
+                  "complexity_estimate": {
+                    "type": "string"
+                  },
+                  "avg_time_per_call_ms": {
+                    "type": "number"
+                  },
+                  "optimization_potential": {
+                    "enum": [
+                      "high",
+                      "medium",
+                      "low"
+                    ],
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "memory_issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "leak",
+                      "high_allocation",
+                      "fragmentation",
+                      "gc_pressure"
+                    ],
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "estimated_impact": {
+                    "type": "string"
+                  },
+                  "growth_rate_mb_per_hour": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "io_bottlenecks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "pattern": {
+                    "type": "string"
+                  },
+                  "function": {
+                    "type": "string"
+                  },
+                  "operation": {
+                    "type": "string"
+                  },
+                  "call_count": {
+                    "type": "integer"
+                  },
+                  "avg_time_ms": {
+                    "type": "number"
+                  },
+                  "p99_time_ms": {
+                    "type": "number"
+                  },
+                  "optimization": {
+                    "type": "string"
+                  },
+                  "total_wait_time_ms": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "concurrency_issues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "lock_contention",
+                      "race_condition",
+                      "deadlock_risk",
+                      "thread_starvation"
+                    ],
+                    "type": "string"
+                  },
+                  "impact": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  },
+                  "contention_rate": {
+                    "type": "number"
+                  },
+                  "wait_time_avg_ms": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "implementation_plan": {
+          "type": "object",
+          "properties": {
+            "phases": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "tasks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "duration": {
+                    "type": "string"
+                  },
+                  "expected_improvement": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "total_expected_improvement": {
+              "type": "string"
+            }
+          }
+        },
+        "performance_patterns": {
+          "type": "object",
+          "properties": {
+            "usage_patterns": {
+              "type": "object",
+              "properties": {
+                "slow_endpoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "memory_intensive": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "popular_endpoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "temporal_patterns": {
+              "type": "object",
+              "properties": {
+                "peak_hours": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "low_usage_hours": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "degradation_trend": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "monitoring_recommendations": {
+          "type": "object",
+          "properties": {
+            "key_metrics": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "alert_thresholds": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "optimization_recommendations": {
+          "type": "object",
+          "properties": {
+            "low_priority": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/recommendation"
+              }
+            },
+            "high_priority": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/recommendation"
+              }
+            },
+            "medium_priority": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/recommendation"
+              }
+            }
+          }
+        }
+      },
+      "definitions": {
+        "recommendation": {
+          "type": "object",
+          "properties": {
+            "risk": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            "issue": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            },
+            "category": {
+              "enum": [
+                "algorithm",
+                "database",
+                "memory",
+                "io",
+                "concurrency",
+                "caching",
+                "architecture"
+              ],
+              "type": "string"
+            },
+            "solution": {
+              "type": "string"
+            },
+            "code_example": {
+              "type": "string"
+            },
+            "estimated_improvement": {
+              "type": "string"
+            },
+            "implementation_effort": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

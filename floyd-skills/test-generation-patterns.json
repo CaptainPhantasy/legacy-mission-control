@@ -1,0 +1,343 @@
+{
+  "name": "test-generation-patterns",
+  "category": "patterns.testing.automated-generation",
+  "purpose": "Automatically generate comprehensive test cases from existing code using pattern analysis, AST parsing, and intelligent coverage targeting. Ensures test coverage across happy paths, edge cases, error scenarios, and async patterns with confidence-scored test quality.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://test-generation-patterns/input/v2",
+      "type": "object",
+      "title": "Test Generation Patterns Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "code"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "maxLength": 100000,
+                  "description": "Source code to generate tests for"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "file_path"
+              ],
+              "properties": {
+                "file_path": {
+                  "type": "string",
+                  "pattern": "^[^<>:\"|?*]+$",
+                  "maxLength": 500
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "directory"
+              ],
+              "properties": {
+                "pattern": {
+                  "type": "string",
+                  "default": "*.{js,ts,py}"
+                },
+                "directory": {
+                  "type": "string"
+                }
+              }
+            }
+          ]
+        },
+        "language": {
+          "enum": [
+            "javascript",
+            "typescript",
+            "python"
+          ],
+          "type": "string"
+        },
+        "test_options": {
+          "type": "object",
+          "properties": {
+            "test_style": {
+              "enum": [
+                "behavioral",
+                "structural",
+                "property-based"
+              ],
+              "type": "string",
+              "default": "behavioral"
+            },
+            "mock_dependencies": {
+              "type": "boolean",
+              "default": true
+            },
+            "include_edge_cases": {
+              "type": "boolean",
+              "default": true
+            },
+            "minimum_confidence": {
+              "type": "number",
+              "default": 0.6,
+              "maximum": 1,
+              "minimum": 0
+            },
+            "include_async_tests": {
+              "type": "boolean",
+              "default": true
+            },
+            "include_error_tests": {
+              "type": "boolean",
+              "default": true
+            },
+            "include_property_based": {
+              "type": "boolean",
+              "default": false
+            },
+            "max_tests_per_function": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1
+            },
+            "include_performance_tests": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        },
+        "test_framework": {
+          "enum": [
+            "jest",
+            "mocha",
+            "vitest",
+            "pytest",
+            "unittest"
+          ],
+          "type": "string",
+          "default": "jest"
+        },
+        "coverage_target": {
+          "enum": [
+            "statement",
+            "branch",
+            "function",
+            "line",
+            "path"
+          ],
+          "type": "string",
+          "default": "branch"
+        }
+      }
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://test-generation-patterns/output/v2",
+      "type": "object",
+      "title": "Test Generation Patterns Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "analysis_summary",
+        "generated_tests",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "generated_tests": {
+          "type": "object",
+          "properties": {
+            "unit_tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/test_case"
+              }
+            },
+            "async_tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/test_case"
+              }
+            },
+            "error_tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/test_case"
+              }
+            },
+            "edge_case_tests": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/test_case"
+              }
+            }
+          }
+        },
+        "mocks_generated": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mock_code": {
+                "type": "string"
+              },
+              "dependency": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "analysis_summary": {
+          "type": "object",
+          "properties": {
+            "classes_found": {
+              "type": "integer"
+            },
+            "async_functions": {
+              "type": "integer"
+            },
+            "functions_found": {
+              "type": "integer"
+            },
+            "complexity_score": {
+              "enum": [
+                "simple",
+                "medium",
+                "complex"
+              ],
+              "type": "string"
+            },
+            "dependencies_detected": {
+              "type": "integer"
+            },
+            "test_patterns_applied": {
+              "type": "integer"
+            }
+          }
+        },
+        "coverage_analysis": {
+          "type": "object",
+          "properties": {
+            "uncovered_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "estimated_branch_coverage": {
+              "type": "number"
+            },
+            "estimated_function_coverage": {
+              "type": "number"
+            },
+            "estimated_statement_coverage": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "definitions": {
+        "test_case": {
+          "type": "object",
+          "required": [
+            "test_id",
+            "type",
+            "description",
+            "test_code",
+            "confidence"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "unit",
+                "edge_case",
+                "error",
+                "async",
+                "property",
+                "integration"
+              ],
+              "type": "string"
+            },
+            "test_id": {
+              "type": "string"
+            },
+            "coverage": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "test_code": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0
+            },
+            "description": {
+              "type": "string"
+            },
+            "target_function": {
+              "type": "string"
+            },
+            "confidence_factors": {
+              "type": "object",
+              "properties": {
+                "coverage": {
+                  "type": "number"
+                },
+                "complexity": {
+                  "type": "number"
+                },
+                "deterministic": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

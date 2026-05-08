@@ -1,0 +1,54 @@
+{
+  "name": "attention-allocation",
+  "category": "General",
+  "purpose": "Optimize attention allocation across multiple tasks, contexts, and priorities.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "attention-allocation",
+    "description": "Optimize attention allocation across multiple tasks, contexts, and priorities.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "tasks"
+      ],
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "description": "tasks parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "constraints parameter"
+        },
+        "time_budget": {
+          "type": "number",
+          "description": "time_budget parameter"
+        },
+        "allocation_strategy": {
+          "type": "string",
+          "description": "allocation_strategy parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "metrics": {
+        "utilization": "number",
+        "balance_score": "number"
+      },
+      "allocation": {
+        "schedule": "array",
+        "unallocated": "array",
+        "task_weights": "object"
+      },
+      "recommendations": "array"
+    }
+  }
+}

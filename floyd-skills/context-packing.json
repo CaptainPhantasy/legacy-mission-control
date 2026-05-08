@@ -1,0 +1,52 @@
+{
+  "name": "context-packing",
+  "category": "General",
+  "purpose": "Efficiently pack maximum relevant context into limited token windows using intelligent compression.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-packing",
+    "description": "Efficiently pack maximum relevant context into limited token windows using intelligent compression.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "context_items",
+        "max_tokens"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "max_tokens": {
+          "type": "number",
+          "description": "max_tokens parameter"
+        },
+        "context_items": {
+          "type": "array",
+          "description": "context_items parameter"
+        },
+        "priority_weights": {
+          "type": "object",
+          "description": "priority_weights parameter"
+        },
+        "preserve_structure": {
+          "type": "boolean",
+          "description": "preserve_structure parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "excluded_items": "array",
+      "included_items": "array",
+      "packed_context": "string",
+      "efficiency_metrics": {
+        "relevance_score": "number",
+        "compression_ratio": "number"
+      }
+    }
+  }
+}

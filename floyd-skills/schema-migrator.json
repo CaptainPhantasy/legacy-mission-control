@@ -1,0 +1,52 @@
+{
+  "name": "schema-migrator",
+  "category": "General",
+  "purpose": "Generate database schema migrations with validation, rollback plans, and SQL generation for safe schema evolution.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "schema-migrator",
+    "description": "Generate database schema migrations with validation, rollback plans, and SQL generation for safe schema evolution.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "source_schema",
+        "target_schema"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "source_schema": {
+          "type": "object",
+          "description": "source_schema parameter"
+        },
+        "target_schema": {
+          "type": "object",
+          "description": "target_schema parameter"
+        },
+        "validate_only": {
+          "type": "boolean",
+          "description": "validate_only parameter"
+        },
+        "migration_path": {
+          "type": "string",
+          "description": "migration_path parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "validation": {
+        "errors": "array",
+        "is_valid": "boolean",
+        "warnings": "array"
+      },
+      "rollback_plan": "array",
+      "migration_steps": "array"
+    }
+  }
+}

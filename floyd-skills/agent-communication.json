@@ -1,0 +1,50 @@
+{
+  "name": "agent-communication",
+  "category": "General",
+  "purpose": "Facilitate structured communication between agents with message routing and protocol handling.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "agent-communication",
+    "description": "Facilitate structured communication between agents with message routing and protocol handling.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "channel": {
+          "type": "string",
+          "description": "channel parameter"
+        },
+        "message": {
+          "type": "object",
+          "description": "message parameter"
+        },
+        "protocol": {
+          "type": "string",
+          "description": "protocol parameter"
+        },
+        "target_agents": {
+          "type": "array",
+          "description": "target_agents parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "responses": "array?",
+      "delivery_status": {
+        "sent": "number",
+        "failed": "number",
+        "delivered": "number"
+      },
+      "subscription_status": "object?"
+    }
+  }
+}

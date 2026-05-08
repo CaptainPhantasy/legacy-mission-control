@@ -1,0 +1,379 @@
+{
+  "name": "semantic-diff-validation",
+  "category": "analysis.code-validation.semantic",
+  "purpose": "Validate that code changes preserve semantic behavior while allowing structural improvements. Detects breaking changes, behavioral modifications, and potential bugs with quantified risk scoring and actionable remediation guidance.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://semantic-diff-validation/input/v2",
+      "type": "object",
+      "title": "Semantic Diff Validation Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "diff"
+      ],
+      "properties": {
+        "diff": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "format",
+                "content"
+              ],
+              "properties": {
+                "format": {
+                  "const": "unified"
+                },
+                "content": {
+                  "type": "string",
+                  "maxLength": 1000000,
+                  "description": "Unified diff content"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "format",
+                "commit_range"
+              ],
+              "properties": {
+                "format": {
+                  "const": "git"
+                },
+                "commit_range": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]+\\.\\.[a-f0-9]+$",
+                  "description": "Git commit range (e.g., abc123..def456)"
+                },
+                "repository_path": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "format",
+                "files"
+              ],
+              "properties": {
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "path",
+                      "change_type"
+                    ],
+                    "properties": {
+                      "path": {
+                        "type": "string"
+                      },
+                      "change_type": {
+                        "enum": [
+                          "added",
+                          "modified",
+                          "deleted",
+                          "renamed"
+                        ],
+                        "type": "string"
+                      },
+                      "new_content": {
+                        "type": "string"
+                      },
+                      "old_content": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "maxItems": 100
+                },
+                "format": {
+                  "const": "files"
+                }
+              }
+            }
+          ]
+        },
+        "codebase_context": {
+          "type": "string",
+          "maxLength": 5000,
+          "description": "Additional context about usage and dependencies"
+        },
+        "validation_options": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "enum": [
+                "typescript",
+                "javascript",
+                "python",
+                "auto"
+              ],
+              "type": "string",
+              "default": "auto"
+            },
+            "generate_tests": {
+              "type": "boolean",
+              "default": true
+            },
+            "risk_threshold": {
+              "type": "number",
+              "default": 5,
+              "maximum": 10,
+              "minimum": 0,
+              "description": "Minimum risk score to flag"
+            },
+            "validation_depth": {
+              "enum": [
+                "syntax",
+                "semantic",
+                "behavioral"
+              ],
+              "type": "string",
+              "default": "semantic"
+            },
+            "include_suggestions": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://semantic-diff-validation/output/v2",
+      "type": "object",
+      "title": "Semantic Diff Validation Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "validation_summary",
+        "findings",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "file",
+              "type",
+              "severity",
+              "risk_score",
+              "description"
+            ],
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "type": {
+                "enum": [
+                  "breaking_change",
+                  "behavioral_change",
+                  "signature_change",
+                  "refactoring",
+                  "additive",
+                  "documentation"
+                ],
+                "type": "string"
+              },
+              "impact": {
+                "type": "string"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "error",
+                  "critical"
+                ],
+                "type": "string"
+              },
+              "risk_score": {
+                "type": "number",
+                "maximum": 10,
+                "minimum": 0
+              },
+              "change_type": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "new_signature": {
+                "type": "string"
+              },
+              "old_signature": {
+                "type": "string"
+              },
+              "recommendation": {
+                "type": "string"
+              },
+              "risk_breakdown": {
+                "type": "object",
+                "properties": {
+                  "base_score": {
+                    "type": "number"
+                  },
+                  "scope_modifier": {
+                    "type": "number"
+                  },
+                  "context_modifier": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "risk_assessment": {
+          "type": "object",
+          "properties": {
+            "additive_changes": {
+              "type": "integer"
+            },
+            "breaking_changes": {
+              "type": "integer"
+            },
+            "risk_distribution": {
+              "type": "object",
+              "properties": {
+                "low": {
+                  "type": "integer"
+                },
+                "high": {
+                  "type": "integer"
+                },
+                "medium": {
+                  "type": "integer"
+                },
+                "critical": {
+                  "type": "integer"
+                }
+              }
+            },
+            "signature_changes": {
+              "type": "integer"
+            },
+            "behavioral_changes": {
+              "type": "integer"
+            }
+          }
+        },
+        "test_suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "regression_test",
+                  "integration_test",
+                  "unit_test"
+                ],
+                "type": "string"
+              },
+              "priority": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ],
+                "type": "string"
+              },
+              "test_code": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "validation_summary": {
+          "type": "object",
+          "properties": {
+            "overall_risk": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ],
+              "type": "string"
+            },
+            "files_changed": {
+              "type": "integer"
+            },
+            "validation_level": {
+              "type": "string"
+            },
+            "functions_modified": {
+              "type": "integer"
+            },
+            "interfaces_changed": {
+              "type": "integer"
+            },
+            "overall_risk_score": {
+              "type": "number",
+              "maximum": 10,
+              "minimum": 0
+            }
+          }
+        },
+        "compatibility_matrix": {
+          "type": "object",
+          "properties": {
+            "api_version_change": {
+              "type": "boolean"
+            },
+            "forward_compatible": {
+              "type": "boolean"
+            },
+            "backward_compatible": {
+              "type": "boolean"
+            },
+            "requires_client_update": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  }
+}

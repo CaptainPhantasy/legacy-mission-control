@@ -1,0 +1,51 @@
+{
+  "name": "knowledge-synthesis",
+  "category": "General",
+  "purpose": "Synthesize knowledge from multiple sources into coherent, structured understanding.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "knowledge-synthesis",
+    "description": "Synthesize knowledge from multiple sources into coherent, structured understanding.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "sources"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "sources": {
+          "type": "array",
+          "description": "sources parameter"
+        },
+        "output_format": {
+          "type": "string",
+          "description": "output_format parameter"
+        },
+        "synthesis_goal": {
+          "type": "string",
+          "description": "synthesis_goal parameter"
+        },
+        "conflict_resolution": {
+          "type": "string",
+          "description": "conflict_resolution parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "conflicts": "array",
+      "synthesis": {
+        "summary": "string",
+        "key_points": "array",
+        "sources_used": "array"
+      },
+      "confidence": "number"
+    }
+  }
+}

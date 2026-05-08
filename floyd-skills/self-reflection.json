@@ -1,0 +1,50 @@
+{
+  "name": "self-reflection",
+  "category": "General",
+  "purpose": "Enable agents to reflect on their own performance, decisions, and learning.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "self-reflection",
+    "description": "Enable agents to reflect on their own performance, decisions, and learning.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "depth": {
+          "type": "string",
+          "description": "depth parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "time_period": {
+          "type": "object",
+          "description": "time_period parameter"
+        },
+        "reflection_target": {
+          "type": "string",
+          "description": "reflection_target parameter"
+        },
+        "include_counterfactuals": {
+          "type": "boolean",
+          "description": "include_counterfactuals parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "confidence": "number",
+      "reflection": {
+        "insights": "array",
+        "patterns": "array",
+        "anomalies": "array"
+      },
+      "improvement_plan": "array"
+    }
+  }
+}

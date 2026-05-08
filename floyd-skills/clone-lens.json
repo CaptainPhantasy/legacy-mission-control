@@ -1,0 +1,44 @@
+{
+  "name": "clone-lens",
+  "category": "Ghost Algorithm",
+  "purpose": "Identifies structural code duplicates across the entire codebase to prevent redundant refactoring.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Suffix Array + LCP Array O(n log n)",
+    "hook": "BroworkManager.pre_generation",
+    "name": "clone-lens",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Finds structural code duplicates using Suffix/LCP Arrays. Use before refactoring to prevent redundant agent work.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "description": "Root directory for analysis"
+        },
+        "min_tokens": {
+          "type": "integer",
+          "default": 20
+        },
+        "similarity": {
+          "type": "number",
+          "default": 0.8,
+          "maximum": 1,
+          "minimum": 0
+        }
+      }
+    },
+    "outputSchema": {
+      "merge_risk": "number",
+      "clone_groups": "array",
+      "consolidation_targets": "array"
+    }
+  }
+}

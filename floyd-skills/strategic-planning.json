@@ -1,0 +1,55 @@
+{
+  "name": "strategic-planning",
+  "category": "General",
+  "purpose": "Develop and execute strategic plans with goal decomposition and progress tracking.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "strategic-planning",
+    "description": "Develop and execute strategic plans with goal decomposition and progress tracking.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "goals": {
+          "type": "array",
+          "description": "goals parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "horizon": {
+          "type": "string",
+          "description": "horizon parameter"
+        },
+        "plan_id": {
+          "type": "string",
+          "description": "plan_id parameter"
+        },
+        "constraints": {
+          "type": "object",
+          "description": "constraints parameter"
+        },
+        "adaptation_triggers": {
+          "type": "array",
+          "description": "adaptation_triggers parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "plan": {
+        "goals": "array",
+        "actions": "array",
+        "timeline": "object",
+        "milestones": "array"
+      },
+      "adaptations": "array",
+      "execution_status": "object"
+    }
+  }
+}

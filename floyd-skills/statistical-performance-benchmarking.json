@@ -1,0 +1,393 @@
+{
+  "name": "statistical-performance-benchmarking",
+  "category": "analysis.algorithms.performance",
+  "purpose": "Perform comprehensive statistical analysis of code performance using high-resolution timing and robust statistical methods. Provides accurate performance measurements with confidence intervals, outlier detection, and regression analysis for data-driven optimization decisions.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://statistical-performance-benchmarking/input/v2",
+      "type": "object",
+      "oneOf": [
+        {
+          "title": "Run Benchmark",
+          "required": [
+            "action",
+            "benchmark_id",
+            "code_snippet"
+          ],
+          "properties": {
+            "action": {
+              "const": "run"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Additional context information",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "iterations": {
+              "type": "integer",
+              "default": 100,
+              "maximum": 10000,
+              "minimum": 10,
+              "description": "Number of measurement runs"
+            },
+            "warmup_runs": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 1000,
+              "minimum": 0,
+              "description": "Warmup iterations (discarded)"
+            },
+            "benchmark_id": {
+              "type": "string",
+              "pattern": "^[a-z0-9_-]+$",
+              "maxLength": 100,
+              "description": "Unique benchmark identifier"
+            },
+            "code_snippet": {
+              "type": "string",
+              "maxLength": 50000,
+              "description": "Code to benchmark (JavaScript/TypeScript)"
+            },
+            "confidence_level": {
+              "enum": [
+                0.9,
+                0.95,
+                0.99
+              ],
+              "type": "number",
+              "default": 0.95,
+              "description": "Confidence level for intervals"
+            }
+          }
+        },
+        {
+          "title": "Compare Benchmarks",
+          "required": [
+            "action",
+            "benchmark_id_a",
+            "benchmark_id_b"
+          ],
+          "properties": {
+            "action": {
+              "const": "compare"
+            },
+            "benchmark_id_a": {
+              "type": "string"
+            },
+            "benchmark_id_b": {
+              "type": "string"
+            },
+            "comparison_method": {
+              "enum": [
+                "paired_t_test",
+                "welch_t_test",
+                "mann_whitney"
+              ],
+              "type": "string",
+              "default": "welch_t_test"
+            },
+            "significance_level": {
+              "enum": [
+                0.01,
+                0.05,
+                0.1
+              ],
+              "type": "number",
+              "default": 0.05
+            }
+          }
+        },
+        {
+          "title": "Regression Check",
+          "required": [
+            "action",
+            "benchmark_id",
+            "baseline_id"
+          ],
+          "properties": {
+            "action": {
+              "const": "regression_check"
+            },
+            "baseline_id": {
+              "type": "string"
+            },
+            "benchmark_id": {
+              "type": "string"
+            },
+            "threshold_percent": {
+              "type": "number",
+              "default": 10,
+              "maximum": 100,
+              "minimum": 0
+            },
+            "fail_on_regression": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        {
+          "title": "Set Baseline",
+          "required": [
+            "action",
+            "benchmark_id"
+          ],
+          "properties": {
+            "action": {
+              "const": "baseline"
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "benchmark_id": {
+              "type": "string"
+            }
+          }
+        }
+      ],
+      "title": "Statistical Performance Benchmarking Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "action"
+      ]
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://statistical-performance-benchmarking/output/v2",
+      "type": "object",
+      "title": "Statistical Performance Benchmarking Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "benchmark_id",
+        "metrics",
+        "metadata"
+      ],
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "max": {
+              "type": "number"
+            },
+            "min": {
+              "type": "number"
+            },
+            "p50": {
+              "type": "number"
+            },
+            "p90": {
+              "type": "number"
+            },
+            "p95": {
+              "type": "number"
+            },
+            "p99": {
+              "type": "number"
+            },
+            "mean": {
+              "type": "number",
+              "description": "Mean execution time (ms)"
+            },
+            "median": {
+              "type": "number"
+            },
+            "std_dev": {
+              "type": "number"
+            },
+            "variance": {
+              "type": "number"
+            },
+            "performance_class": {
+              "enum": [
+                "excellent",
+                "good",
+                "moderate",
+                "poor",
+                "inconsistent"
+              ],
+              "type": "string"
+            },
+            "raw_times_summary": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "histogram": {
+                  "type": "object",
+                  "properties": {
+                    "counts": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    },
+                    "bucket_edges": {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                },
+                "sample_last_5": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                },
+                "sample_first_5": {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "confidence_interval": {
+              "type": "object",
+              "properties": {
+                "level": {
+                  "type": "number"
+                },
+                "lower": {
+                  "type": "number"
+                },
+                "upper": {
+                  "type": "number"
+                }
+              }
+            },
+            "throughput_per_second": {
+              "type": "number"
+            },
+            "coefficient_of_variation": {
+              "type": "number"
+            }
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "analysis": {
+          "type": "object",
+          "properties": {
+            "outlier_method": {
+              "type": "string"
+            },
+            "outliers_removed": {
+              "type": "boolean"
+            },
+            "distribution_type": {
+              "type": "string"
+            },
+            "outliers_detected": {
+              "type": "integer"
+            },
+            "sample_size_adequacy": {
+              "type": "boolean"
+            },
+            "statistical_significance": {
+              "type": "number"
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "environment": {
+              "type": "string"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "iterations": {
+          "type": "integer"
+        },
+        "warmup_runs": {
+          "type": "integer"
+        },
+        "benchmark_id": {
+          "type": "string"
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "comparison_result": {
+          "type": "object",
+          "properties": {
+            "winner": {
+              "type": "string"
+            },
+            "p_value": {
+              "type": "number"
+            },
+            "effect_size": {
+              "type": "number"
+            },
+            "effect_interpretation": {
+              "type": "string"
+            },
+            "statistically_significant": {
+              "type": "boolean"
+            },
+            "performance_change_percent": {
+              "type": "number"
+            }
+          }
+        },
+        "regression_result": {
+          "type": "object",
+          "properties": {
+            "severity": {
+              "enum": [
+                "none",
+                "minor",
+                "moderate",
+                "major"
+              ],
+              "type": "string"
+            },
+            "threshold_percent": {
+              "type": "number"
+            },
+            "regression_detected": {
+              "type": "boolean"
+            },
+            "performance_change_percent": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

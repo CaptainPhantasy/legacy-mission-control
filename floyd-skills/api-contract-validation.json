@@ -1,0 +1,521 @@
+{
+  "name": "api-contract-validation",
+  "category": "patterns.validation.api-compatibility",
+  "purpose": "Systematically validate API contracts for compatibility, consistency, and compliance with design principles. Detects breaking changes, enforces conventions, and provides client impact analysis with detailed migration guidance.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://api-contract-validation/input/v2",
+      "type": "object",
+      "title": "API Contract Validation Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "current_contract"
+      ],
+      "properties": {
+        "client_context": {
+          "type": "object",
+          "properties": {
+            "known_clients": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "min_version": {
+                    "type": "string"
+                  },
+                  "critical_endpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "sla_requirements": {
+              "type": "object",
+              "properties": {
+                "max_payload_size_kb": {
+                  "type": "integer"
+                },
+                "max_response_time_ms": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "current_contract": {
+          "type": "object",
+          "required": [
+            "content"
+          ],
+          "properties": {
+            "format": {
+              "enum": [
+                "openapi",
+                "swagger",
+                "raml",
+                "auto"
+              ],
+              "type": "string",
+              "default": "auto"
+            },
+            "content": {
+              "type": "string",
+              "maxLength": 5000000,
+              "description": "API specification content (YAML or JSON)"
+            },
+            "version": {
+              "type": "string",
+              "description": "Spec version (e.g., '3.0.0')"
+            }
+          }
+        },
+        "baseline_contract": {
+          "type": "object",
+          "properties": {
+            "format": {
+              "enum": [
+                "openapi",
+                "swagger",
+                "raml",
+                "auto"
+              ],
+              "type": "string"
+            },
+            "content": {
+              "type": "string",
+              "maxLength": 5000000
+            },
+            "version": {
+              "type": "string"
+            }
+          },
+          "description": "Previous version for comparison"
+        },
+        "validation_options": {
+          "type": "object",
+          "properties": {
+            "strict_mode": {
+              "type": "boolean",
+              "default": false
+            },
+            "naming_convention": {
+              "type": "object",
+              "properties": {
+                "endpoints": {
+                  "enum": [
+                    "kebab-case",
+                    "snake_case",
+                    "camelCase"
+                  ],
+                  "type": "string",
+                  "default": "kebab-case"
+                },
+                "parameters": {
+                  "enum": [
+                    "snake_case",
+                    "camelCase"
+                  ],
+                  "type": "string",
+                  "default": "snake_case"
+                },
+                "properties": {
+                  "enum": [
+                    "camelCase",
+                    "snake_case"
+                  ],
+                  "type": "string",
+                  "default": "camelCase"
+                }
+              }
+            },
+            "severity_threshold": {
+              "enum": [
+                "info",
+                "warning",
+                "error",
+                "critical"
+              ],
+              "type": "string",
+              "default": "info"
+            },
+            "check_security_practices": {
+              "type": "boolean",
+              "default": true
+            },
+            "check_forward_compatibility": {
+              "type": "boolean",
+              "default": false
+            },
+            "validate_naming_conventions": {
+              "type": "boolean",
+              "default": true
+            },
+            "check_backward_compatibility": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://api-contract-validation/output/v2",
+      "type": "object",
+      "title": "API Contract Validation Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "validation_summary",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "migration_plan": {
+          "type": "object",
+          "properties": {
+            "breaking_changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "change": {
+                    "type": "string"
+                  },
+                  "timeline": {
+                    "type": "string"
+                  },
+                  "client_action": {
+                    "type": "string"
+                  },
+                  "migration_steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "deprecation_schedule": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "change_analysis": {
+          "type": "object",
+          "properties": {
+            "schema_changes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "endpoints_added": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "impact": {
+                    "type": "string"
+                  },
+                  "method": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "endpoints_removed": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "endpoints_modified": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "method": {
+                    "type": "string"
+                  },
+                  "changes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "detail": {
+                          "type": "string"
+                        },
+                        "impact": {
+                          "enum": [
+                            "breaking",
+                            "non_breaking"
+                          ],
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "recommendations": {
+          "type": "object",
+          "properties": {
+            "immediate_actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "action": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "enum": [
+                      "critical",
+                      "high",
+                      "medium",
+                      "low"
+                    ],
+                    "type": "string"
+                  },
+                  "affected_endpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "future_improvements": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "validation_summary": {
+          "type": "object",
+          "properties": {
+            "quality_score": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0
+            },
+            "schemas_total": {
+              "type": "integer"
+            },
+            "overall_status": {
+              "enum": [
+                "valid",
+                "warning",
+                "error",
+                "critical"
+              ],
+              "type": "string"
+            },
+            "endpoints_total": {
+              "type": "integer"
+            },
+            "breaking_changes": {
+              "type": "integer"
+            },
+            "compatibility_score": {
+              "type": "number",
+              "maximum": 1,
+              "minimum": 0
+            },
+            "non_breaking_changes": {
+              "type": "integer"
+            }
+          }
+        },
+        "security_validation": {
+          "type": "object",
+          "properties": {
+            "authorization": {
+              "type": "object"
+            },
+            "authentication": {
+              "type": "object",
+              "properties": {
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "status": {
+                  "type": "string"
+                },
+                "schemes_defined": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "data_validation": {
+              "type": "object"
+            }
+          }
+        },
+        "compatibility_analysis": {
+          "type": "object",
+          "properties": {
+            "client_impact": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "client": {
+                    "type": "string"
+                  },
+                  "compatible": {
+                    "type": "boolean"
+                  },
+                  "blocking_issues": {
+                    "type": "integer"
+                  },
+                  "upgrade_required": {
+                    "type": "boolean"
+                  },
+                  "affected_endpoints": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "forward_compatibility": {
+              "type": "object",
+              "properties": {
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "status": {
+                  "type": "string"
+                }
+              }
+            },
+            "backward_compatibility": {
+              "type": "object",
+              "properties": {
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "status": {
+                  "enum": [
+                    "compatible",
+                    "broken",
+                    "partial"
+                  ],
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "consistency_validation": {
+          "type": "object",
+          "properties": {
+            "error_responses": {
+              "type": "object"
+            },
+            "data_consistency": {
+              "type": "object"
+            },
+            "naming_conventions": {
+              "type": "object",
+              "properties": {
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "status": {
+                  "enum": [
+                    "compliant",
+                    "mostly_compliant",
+                    "non_compliant"
+                  ],
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

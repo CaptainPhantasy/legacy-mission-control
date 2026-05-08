@@ -1,0 +1,53 @@
+{
+  "name": "synchronization",
+  "category": "General",
+  "purpose": "Synchronize state, clocks, and actions across distributed agents.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "synchronization",
+    "description": "Synchronize state, clocks, and actions across distributed agents.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "agents": {
+          "type": "array",
+          "description": "agents parameter"
+        },
+        "sync_type": {
+          "type": "string",
+          "description": "sync_type parameter"
+        },
+        "sync_strategy": {
+          "type": "string",
+          "description": "sync_strategy parameter"
+        },
+        "conflict_resolution": {
+          "type": "string",
+          "description": "conflict_resolution parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "sync_status": {
+        "pending": "array",
+        "conflicts": "array",
+        "synced_agents": "array"
+      },
+      "sync_metrics": {
+        "latency": "number",
+        "consistency": "number"
+      },
+      "recommendations": "array"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "adaptive-behavior",
+  "category": "General",
+  "purpose": "Enable agents to adapt behavior based on environment, feedback, and learning.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "adaptive-behavior",
+    "description": "Enable agents to adapt behavior based on environment, feedback, and learning.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "feedback": {
+          "type": "object",
+          "description": "feedback parameter"
+        },
+        "adaptation_rate": {
+          "type": "number",
+          "description": "adaptation_rate parameter"
+        },
+        "current_behavior": {
+          "type": "object",
+          "description": "current_behavior parameter"
+        },
+        "environment_state": {
+          "type": "object",
+          "description": "environment_state parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "changes": "array",
+      "recommendations": "array",
+      "adapted_behavior": "object",
+      "learning_metrics": {
+        "stability": "number",
+        "improvement": "number"
+      }
+    }
+  }
+}

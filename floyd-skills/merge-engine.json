@@ -1,0 +1,40 @@
+{
+  "name": "merge-engine",
+  "category": "Ghost Algorithm",
+  "purpose": "Enables multi-agent parallel editing on a single file without race conditions or overwrites.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Operational Transformation (OT)",
+    "hook": "BroworkManager.file_lock_handler",
+    "name": "merge-engine",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Operational Transformation (OT) engine for parallel agent file editing. Resolves conflicts via causal ordering.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "base_state",
+        "ops"
+      ],
+      "properties": {
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "description": "Stream of insert/delete operations from agents"
+        },
+        "base_state": {
+          "type": "string"
+        }
+      }
+    },
+    "outputSchema": {
+      "merged_content": "string",
+      "causality_graph": "object"
+    }
+  }
+}

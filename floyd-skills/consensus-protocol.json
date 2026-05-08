@@ -1,0 +1,51 @@
+{
+  "name": "consensus-protocol",
+  "category": "General",
+  "purpose": "Implement consensus protocols for multi-agent decision making with conflict resolution.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "consensus-protocol",
+    "description": "Implement consensus protocols for multi-agent decision making with conflict resolution.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "vote": {
+          "type": "object",
+          "description": "vote parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "proposal": {
+          "type": "object",
+          "description": "proposal parameter"
+        },
+        "proposal_id": {
+          "type": "string",
+          "description": "proposal_id parameter"
+        },
+        "consensus_threshold": {
+          "type": "number",
+          "description": "consensus_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "conflicts": "array",
+      "resolution": "object?",
+      "consensus_status": {
+        "votes": "object",
+        "decision": "string?",
+        "confidence": "number",
+        "proposal_id": "string"
+      }
+    }
+  }
+}

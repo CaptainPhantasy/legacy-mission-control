@@ -1,0 +1,63 @@
+{
+  "name": "benchmark-runner",
+  "category": "General",
+  "purpose": "Execute code benchmarks with statistical analysis, regression detection, and performance recommendations.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "benchmark-runner",
+    "description": "Execute code benchmarks with statistical analysis, regression detection, and performance recommendations.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "benchmark_id"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "compare_to": {
+          "type": "string",
+          "description": "compare_to parameter"
+        },
+        "iterations": {
+          "type": "number",
+          "description": "iterations parameter"
+        },
+        "warmup_runs": {
+          "type": "number",
+          "description": "warmup_runs parameter"
+        },
+        "benchmark_id": {
+          "type": "string",
+          "description": "benchmark_id parameter"
+        },
+        "code_snippet": {
+          "type": "string",
+          "description": "code_snippet parameter"
+        },
+        "threshold_percent": {
+          "type": "number",
+          "description": "threshold_percent parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "metrics": {
+        "max": "number",
+        "min": "number",
+        "p95": "number",
+        "p99": "number",
+        "mean": "number",
+        "median": "number",
+        "stdDev": "number"
+      },
+      "comparison": "object?",
+      "recommendations": "array"
+    }
+  }
+}

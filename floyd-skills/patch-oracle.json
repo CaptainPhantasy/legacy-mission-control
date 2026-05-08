@@ -1,0 +1,39 @@
+{
+  "name": "patch-oracle",
+  "category": "Ghost Algorithm",
+  "purpose": "Predicts the 'blast radius' of a change by identifying architectural fault lines using the Fiedler vector.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Spectral Graph Theory (Resistance Distance)",
+    "hook": "secure-hook-executor.pre_change",
+    "name": "patch-oracle",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Spectral Graph Theory analyzer (Fiedler Vector). Predicts change impact surface and cascade risks.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "dep_graph",
+        "target_files"
+      ],
+      "properties": {
+        "dep_graph": {
+          "type": "object"
+        },
+        "target_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "outputSchema": {
+      "impact_surface": "array",
+      "cascade_risk_score": "number"
+    }
+  }
+}

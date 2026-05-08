@@ -1,0 +1,50 @@
+{
+  "name": "collective-decision-making",
+  "category": "General",
+  "purpose": "Facilitate collective decision making across multiple agents with voting and preference aggregation.",
+  "version": "2.0.0",
+  "server": "ai-orchestration",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "collective-decision-making",
+    "description": "Facilitate collective decision making across multiple agents with voting and preference aggregation.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "decision": {
+          "type": "object",
+          "description": "decision parameter"
+        },
+        "decision_id": {
+          "type": "string",
+          "description": "decision_id parameter"
+        },
+        "participants": {
+          "type": "array",
+          "description": "participants parameter"
+        },
+        "voting_method": {
+          "type": "string",
+          "description": "voting_method parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "vote_breakdown": "object",
+      "decision_result": {
+        "id": "string",
+        "outcome": "object",
+        "support_level": "number"
+      },
+      "dissenting_views": "array"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "bloom-sentinel",
+  "category": "Ghost Algorithm",
+  "purpose": "Global deduplication. Prevents any agent in the swarm from repeating a failed or existing code path.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Probabilistic Bloom Filter",
+    "hook": "Global.session_manager",
+    "name": "bloom-sentinel",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Probabilistic deduplication using Bloom Filters. Prevents agents from repeating seen/failed logic.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "code_hash",
+        "filter_state"
+      ],
+      "properties": {
+        "code_hash": {
+          "type": "string"
+        },
+        "filter_state": {
+          "type": "string",
+          "description": "Current Base64 encoded bit array"
+        }
+      }
+    },
+    "outputSchema": {
+      "status": "string",
+      "description": "IS_NEW | SEEN_BEFORE"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "context-orchestration",
+  "category": "General",
+  "purpose": "Orchestrate multiple context sources, prioritize information, and manage context flow across agents.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-orchestration",
+    "description": "Orchestrate multiple context sources, prioritize information, and manage context flow across agents.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "contexts"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "contexts": {
+          "type": "array",
+          "description": "contexts parameter"
+        },
+        "routing_rules": {
+          "type": "object",
+          "description": "routing_rules parameter"
+        },
+        "max_concurrent": {
+          "type": "number",
+          "description": "max_concurrent parameter"
+        },
+        "priority_function": {
+          "type": "string",
+          "description": "priority_function parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "performance": "object",
+      "orchestration": {
+        "pending": "array",
+        "completed": "array",
+        "active_contexts": "array"
+      },
+      "routing_decisions": "array"
+    }
+  }
+}

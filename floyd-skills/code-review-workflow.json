@@ -1,0 +1,414 @@
+{
+  "name": "code-review-workflow",
+  "category": "workflows.code-review.quality-assurance",
+  "purpose": "Systematic code review process that combines automated analysis with human review patterns to ensure code quality, maintainability, and team knowledge sharing. Provides structured checklists, focus areas, and actionable feedback templates for effective peer review.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://code-review-workflow/input/v2",
+      "type": "object",
+      "title": "Code Review Workflow Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "pull_request"
+      ],
+      "properties": {
+        "pull_request": {
+          "type": "object",
+          "required": [
+            "title",
+            "files_changed",
+            "base_branch",
+            "head_branch"
+          ],
+          "properties": {
+            "draft": {
+              "type": "boolean",
+              "default": false
+            },
+            "title": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1,
+              "description": "PR title describing the change"
+            },
+            "author": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-]+$",
+              "description": "PR author username"
+            },
+            "labels": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "maxItems": 20
+            },
+            "base_branch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 10000,
+              "description": "Detailed PR description"
+            },
+            "head_branch": {
+              "type": "string",
+              "minLength": 1
+            },
+            "files_changed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "path",
+                  "change_type"
+                ],
+                "properties": {
+                  "diff": {
+                    "type": "string",
+                    "maxLength": 100000
+                  },
+                  "path": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "change_type": {
+                    "enum": [
+                      "added",
+                      "modified",
+                      "deleted",
+                      "renamed"
+                    ],
+                    "type": "string"
+                  },
+                  "lines_added": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "lines_deleted": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              },
+              "maxItems": 100,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "review_options": {
+          "type": "object",
+          "properties": {
+            "focus_areas": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "security",
+                  "performance",
+                  "style",
+                  "logic",
+                  "tests",
+                  "documentation",
+                  "architecture"
+                ],
+                "type": "string"
+              },
+              "default": [
+                "security",
+                "performance",
+                "logic"
+              ]
+            },
+            "max_comments": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1
+            },
+            "include_praise": {
+              "type": "boolean",
+              "default": true
+            },
+            "generate_checklist": {
+              "type": "boolean",
+              "default": true
+            },
+            "severity_threshold": {
+              "enum": [
+                "all",
+                "warning",
+                "error",
+                "critical"
+              ],
+              "type": "string",
+              "default": "all"
+            }
+          },
+          "additionalProperties": false
+        },
+        "reviewer_context": {
+          "type": "object",
+          "properties": {
+            "expertise_level": {
+              "enum": [
+                "junior",
+                "intermediate",
+                "senior",
+                "expert"
+              ],
+              "type": "string",
+              "default": "intermediate"
+            },
+            "time_constraints": {
+              "enum": [
+                "minimal",
+                "standard",
+                "thorough"
+              ],
+              "type": "string",
+              "default": "standard"
+            },
+            "familiar_with_codebase": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "repository_context": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "enum": [
+                "typescript",
+                "javascript",
+                "python",
+                "java",
+                "go",
+                "rust",
+                "csharp"
+              ],
+              "type": "string"
+            },
+            "ci_status": {
+              "enum": [
+                "pending",
+                "passing",
+                "failing",
+                "unknown"
+              ],
+              "type": "string"
+            },
+            "framework": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "team_size": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 1
+            },
+            "project_type": {
+              "enum": [
+                "backend_api",
+                "frontend_web",
+                "mobile",
+                "library",
+                "cli",
+                "infrastructure"
+              ],
+              "type": "string"
+            },
+            "test_framework": {
+              "type": "string",
+              "maxLength": 50
+            },
+            "test_coverage_percent": {
+              "type": "number",
+              "maximum": 100,
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "description": "Input for systematic code review process",
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://code-review-workflow/output/v2",
+      "type": "object",
+      "title": "Code Review Workflow Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "review_plan",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "findings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "file": {
+                "type": "string"
+              },
+              "line": {
+                "type": "integer"
+              },
+              "message": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "severity": {
+                "enum": [
+                  "info",
+                  "warning",
+                  "error",
+                  "critical"
+                ],
+                "type": "string"
+              },
+              "suggestion": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "review_plan": {
+          "type": "object",
+          "properties": {
+            "focus_areas": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "review_priority": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ],
+              "type": "string"
+            },
+            "recommended_reviewers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "reason": {
+                    "type": "string"
+                  },
+                  "expertise": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "estimated_time_minutes": {
+              "type": "integer",
+              "maximum": 480,
+              "minimum": 5
+            }
+          }
+        },
+        "review_checklist": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "approval_criteria": {
+          "type": "object",
+          "properties": {
+            "must_haves": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nice_to_haves": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "automated_analysis": {
+          "type": "object",
+          "properties": {
+            "static_analysis": {
+              "type": "object",
+              "properties": {
+                "info": {
+                  "type": "integer"
+                },
+                "critical": {
+                  "type": "integer"
+                },
+                "warnings": {
+                  "type": "integer"
+                },
+                "issues_found": {
+                  "type": "integer"
+                }
+              }
+            },
+            "complexity_metrics": {
+              "type": "object",
+              "properties": {
+                "cognitive_complexity": {
+                  "type": "string"
+                },
+                "cyclomatic_complexity": {
+                  "type": "string"
+                },
+                "maintainability_index": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "knowledge-sharing",
+  "category": "General",
+  "purpose": "Facilitate knowledge sharing between agents with versioning and conflict detection.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "knowledge-sharing",
+    "description": "Facilitate knowledge sharing between agents with versioning and conflict detection.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "knowledge": {
+          "type": "object",
+          "description": "knowledge parameter"
+        },
+        "target_agents": {
+          "type": "array",
+          "description": "target_agents parameter"
+        },
+        "merge_strategy": {
+          "type": "string",
+          "description": "merge_strategy parameter"
+        },
+        "conflict_handling": {
+          "type": "string",
+          "description": "conflict_handling parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "sync_status": "object",
+      "version_info": "object",
+      "sharing_result": {
+        "conflicts": "array",
+        "shared_to": "array",
+        "merged_knowledge": "object"
+      }
+    }
+  }
+}

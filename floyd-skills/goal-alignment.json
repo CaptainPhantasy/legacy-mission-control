@@ -1,0 +1,50 @@
+{
+  "name": "goal-alignment",
+  "category": "General",
+  "purpose": "Ensure alignment between agent goals, user goals, and system objectives.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "goal-alignment",
+    "description": "Ensure alignment between agent goals, user goals, and system objectives.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "user_goals": {
+          "type": "array",
+          "description": "user_goals parameter"
+        },
+        "agent_goals": {
+          "type": "array",
+          "description": "agent_goals parameter"
+        },
+        "system_objectives": {
+          "type": "array",
+          "description": "system_objectives parameter"
+        },
+        "alignment_threshold": {
+          "type": "number",
+          "description": "alignment_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "alignment": {
+        "score": "number",
+        "conflicts": "array",
+        "synergies": "array"
+      },
+      "recommendations": "array",
+      "risk_assessment": "object"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "git-bisect",
+  "category": "General",
+  "purpose": "Automated git bisect with test command execution to identify the exact commit that introduced a bug.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "git-bisect",
+    "description": "Automated git bisect with test command execution to identify the exact commit that introduced a bug.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "repo_path",
+        "start_commit",
+        "end_commit",
+        "test_command"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "max_steps": {
+          "type": "number",
+          "description": "max_steps parameter"
+        },
+        "repo_path": {
+          "type": "string",
+          "description": "repo_path parameter"
+        },
+        "end_commit": {
+          "type": "string",
+          "description": "end_commit parameter"
+        },
+        "start_commit": {
+          "type": "string",
+          "description": "start_commit parameter"
+        },
+        "test_command": {
+          "type": "string",
+          "description": "test_command parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "log": "array",
+      "result": "object?",
+      "progress": {
+        "confidence": "number",
+        "commits_remaining": "number"
+      },
+      "current_state": {
+        "step": "number",
+        "test_result": "string?",
+        "total_steps": "number",
+        "current_commit": "string"
+      }
+    }
+  }
+}

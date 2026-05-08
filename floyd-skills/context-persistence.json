@@ -1,0 +1,50 @@
+{
+  "name": "context-persistence",
+  "category": "General",
+  "purpose": "Manage persistent storage and retrieval of context across sessions and agents.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "context-persistence",
+    "description": "Manage persistent storage and retrieval of context across sessions and agents.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "context": {
+          "type": "object",
+          "description": "context parameter"
+        },
+        "context_id": {
+          "type": "string",
+          "description": "context_id parameter"
+        },
+        "search_query": {
+          "type": "object",
+          "description": "search_query parameter"
+        },
+        "retention_policy": {
+          "type": "object",
+          "description": "retention_policy parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "search_results": "array?",
+      "operation_result": {
+        "success": "boolean",
+        "metadata": "object",
+        "context_id": "string"
+      },
+      "retrieved_context": "object?"
+    }
+  }
+}

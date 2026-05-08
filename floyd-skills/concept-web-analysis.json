@@ -1,0 +1,55 @@
+{
+  "name": "concept-web-analysis",
+  "category": "General",
+  "purpose": "Analyze interconnected concepts as a web/graph to understand relationships and dependencies.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "concept-web-analysis",
+    "description": "Analyze interconnected concepts as a web/graph to understand relationships and dependencies.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "concepts"
+      ],
+      "properties": {
+        "depth": {
+          "type": "number",
+          "description": "depth parameter"
+        },
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "concepts": {
+          "type": "array",
+          "description": "concepts parameter"
+        },
+        "central_concept": {
+          "type": "string",
+          "description": "central_concept parameter"
+        },
+        "relationship_types": {
+          "type": "array",
+          "description": "relationship_types parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "web": {
+        "edges": "array",
+        "nodes": "array",
+        "clusters": "array"
+      },
+      "metrics": {
+        "density": "number",
+        "centrality": "object",
+        "modularity": "number"
+      },
+      "insights": "array"
+    }
+  }
+}

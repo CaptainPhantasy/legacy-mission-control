@@ -1,0 +1,50 @@
+{
+  "name": "meta-reasoning",
+  "category": "General",
+  "purpose": "Reason about reasoning processes to optimize thinking strategies and avoid pitfalls.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "meta-reasoning",
+    "description": "Reason about reasoning processes to optimize thinking strategies and avoid pitfalls.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "reasoning_trace": {
+          "type": "object",
+          "description": "reasoning_trace parameter"
+        },
+        "pitfall_detection": {
+          "type": "boolean",
+          "description": "pitfall_detection parameter"
+        },
+        "optimization_target": {
+          "type": "string",
+          "description": "optimization_target parameter"
+        },
+        "intervention_threshold": {
+          "type": "number",
+          "description": "intervention_threshold parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "analysis": {
+        "inefficiencies": "array",
+        "pitfalls_detected": "array",
+        "reasoning_quality": "number"
+      },
+      "interventions": "array",
+      "optimized_strategy": "object?"
+    }
+  }
+}

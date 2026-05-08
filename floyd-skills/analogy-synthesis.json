@@ -1,0 +1,338 @@
+{
+  "name": "analogy-synthesis",
+  "category": "reasoning.analogy.pattern-matching",
+  "purpose": "Generate meaningful analogies to explain complex concepts, solve problems through similarity reasoning, and bridge understanding between different domains through structural mapping. Provides confidence-scored analogies with clear limitations and audience-appropriate explanations.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "inputSchema": {
+      "$id": "floyd-skills://analogy-synthesis/input/v2",
+      "type": "object",
+      "title": "Analogy Synthesis Input",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "source_concept"
+      ],
+      "properties": {
+        "source_concept": {
+          "type": "object",
+          "required": [
+            "domain",
+            "description"
+          ],
+          "properties": {
+            "domain": {
+              "type": "string",
+              "examples": [
+                "microservices",
+                "database indexing",
+                "machine learning"
+              ],
+              "maxLength": 100,
+              "minLength": 1,
+              "description": "Source domain (e.g., 'software architecture')"
+            },
+            "description": {
+              "type": "string",
+              "maxLength": 5000,
+              "minLength": 10,
+              "description": "Detailed description of the concept to explain"
+            },
+            "key_properties": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "maxItems": 20,
+              "description": "Essential properties to preserve in analogy"
+            },
+            "complexity_level": {
+              "enum": [
+                "simple",
+                "moderate",
+                "complex",
+                "expert"
+              ],
+              "type": "string",
+              "default": "moderate"
+            }
+          },
+          "additionalProperties": false
+        },
+        "target_audience": {
+          "type": "object",
+          "properties": {
+            "age_group": {
+              "enum": [
+                "child",
+                "teen",
+                "adult",
+                "senior"
+              ],
+              "type": "string",
+              "default": "adult"
+            },
+            "expertise_level": {
+              "enum": [
+                "novice",
+                "intermediate",
+                "expert"
+              ],
+              "type": "string",
+              "default": "intermediate"
+            },
+            "cultural_context": {
+              "type": "string",
+              "maxLength": 100,
+              "description": "Cultural background for relevant analogies"
+            },
+            "familiar_domains": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 50
+              },
+              "examples": [
+                [
+                  "cooking",
+                  "sports",
+                  "business"
+                ]
+              ],
+              "maxItems": 10,
+              "description": "Domains audience is familiar with"
+            }
+          },
+          "additionalProperties": false
+        },
+        "generation_options": {
+          "type": "object",
+          "properties": {
+            "analogy_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "structural",
+                  "functional",
+                  "relational",
+                  "abstract",
+                  "metaphorical"
+                ],
+                "type": "string"
+              },
+              "default": [
+                "structural",
+                "functional"
+              ]
+            },
+            "include_examples": {
+              "type": "boolean",
+              "default": true
+            },
+            "minimum_confidence": {
+              "type": "number",
+              "default": 0.6,
+              "maximum": 1,
+              "minimum": 0,
+              "description": "Minimum confidence threshold for analogies"
+            },
+            "generate_variations": {
+              "type": "integer",
+              "default": 3,
+              "maximum": 10,
+              "minimum": 1,
+              "description": "Number of analogy variations to generate"
+            },
+            "include_limitations": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "description": "Input for generating meaningful analogies",
+      "additionalProperties": false
+    },
+    "outputSchema": {
+      "$id": "floyd-skills://analogy-synthesis/output/v2",
+      "type": "object",
+      "title": "Analogy Synthesis Output",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [
+        "success",
+        "generated_analogies",
+        "metadata"
+      ],
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "analysis": {
+          "type": "object",
+          "properties": {
+            "audience_match": {
+              "enum": [
+                "poor",
+                "fair",
+                "good",
+                "excellent"
+              ],
+              "type": "string"
+            },
+            "recommendations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "concept_complexity": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "type": "string"
+            },
+            "analogy_suitability": {
+              "enum": [
+                "poor",
+                "fair",
+                "good",
+                "excellent"
+              ],
+              "type": "string"
+            }
+          }
+        },
+        "audience": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "required": [
+            "skill_version",
+            "timestamp",
+            "duration_ms"
+          ],
+          "properties": {
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "duration_ms": {
+              "type": "integer"
+            },
+            "skill_version": {
+              "type": "string"
+            }
+          }
+        },
+        "target_concept": {
+          "type": "string"
+        },
+        "usage_guidelines": {
+          "type": "object",
+          "properties": {
+            "explanation": {
+              "type": "string"
+            },
+            "limitations": {
+              "type": "string"
+            },
+            "introduction": {
+              "type": "string"
+            }
+          }
+        },
+        "generated_analogies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "analogy_id",
+              "base_domain",
+              "type",
+              "confidence",
+              "core_analogy",
+              "mapping"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "structural",
+                  "functional",
+                  "relational",
+                  "abstract",
+                  "metaphorical"
+                ],
+                "type": "string"
+              },
+              "mapping": {
+                "type": "object",
+                "description": "Element-to-element mapping",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "benefits": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "analogy_id": {
+                "type": "string"
+              },
+              "confidence": {
+                "type": "number",
+                "maximum": 1,
+                "minimum": 0
+              },
+              "base_domain": {
+                "type": "string"
+              },
+              "explanation": {
+                "type": "string",
+                "description": "Detailed explanation of the analogy"
+              },
+              "limitations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "core_analogy": {
+                "type": "string",
+                "description": "One-sentence analogy statement"
+              },
+              "example_scenario": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "confidence_breakdown": {
+          "type": "object",
+          "properties": {
+            "simplicity_ratio": {
+              "type": "number"
+            },
+            "structural_match": {
+              "type": "number"
+            },
+            "property_coverage": {
+              "type": "number"
+            },
+            "audience_familiarity": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

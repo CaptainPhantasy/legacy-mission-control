@@ -1,0 +1,48 @@
+{
+  "name": "failure-to-test-transmuter",
+  "category": "General",
+  "purpose": "Automatically generate test cases from production failures, stack traces, and error reports.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "failure-to-test-transmuter",
+    "description": "Automatically generate test cases from production failures, stack traces, and error reports.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "failure_report"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "include_mocks": {
+          "type": "boolean",
+          "description": "include_mocks parameter"
+        },
+        "failure_report": {
+          "type": "object",
+          "description": "failure_report parameter"
+        },
+        "test_framework": {
+          "type": "string",
+          "description": "test_framework parameter"
+        },
+        "coverage_target": {
+          "type": "number",
+          "description": "coverage_target parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "tests": "array",
+      "recommendations": "array",
+      "mock_definitions": "array",
+      "coverage_estimate": "number"
+    }
+  }
+}

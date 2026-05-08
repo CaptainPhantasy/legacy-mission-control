@@ -1,0 +1,36 @@
+{
+  "name": "token-alchemist",
+  "category": "Ghost Algorithm",
+  "purpose": "Compresses context windows to their maximum information density before the LLM call.",
+  "version": "2.0.0",
+  "server": null,
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "core": "Kolmogorov Complexity via LZ77",
+    "hook": "MCP.context_pipeline",
+    "name": "token-alchemist",
+    "server": "floyd-ghost",
+    "category": "Ghost Algorithm",
+    "description": "Compresses context windows using LZ77 (Kolmogorov Approximation) to maximize token information density.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "payload"
+      ],
+      "properties": {
+        "payload": {
+          "type": "string"
+        },
+        "target_ratio": {
+          "type": "number",
+          "default": 0.5
+        }
+      }
+    },
+    "outputSchema": {
+      "fidelity_metric": "number",
+      "compressed_payload": "string"
+    }
+  }
+}

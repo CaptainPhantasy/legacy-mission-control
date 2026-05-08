@@ -1,0 +1,53 @@
+{
+  "name": "trace-replay-debugger",
+  "category": "General",
+  "purpose": "Record and replay execution traces for time-travel debugging and root cause analysis.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "trace-replay-debugger",
+    "description": "Record and replay execution traces for time-travel debugging and root cause analysis.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "trace_id": {
+          "type": "string",
+          "description": "trace_id parameter"
+        },
+        "code_path": {
+          "type": "string",
+          "description": "code_path parameter"
+        },
+        "breakpoints": {
+          "type": "array",
+          "description": "breakpoints parameter"
+        },
+        "replay_speed": {
+          "type": "number",
+          "description": "replay_speed parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "trace": {
+        "events": "array",
+        "duration": "number",
+        "memory_snapshots": "array"
+      },
+      "analysis": {
+        "hotspots": "array",
+        "anomalies": "array"
+      },
+      "timeline": "object"
+    }
+  }
+}

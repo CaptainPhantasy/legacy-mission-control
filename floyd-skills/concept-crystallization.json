@@ -1,0 +1,54 @@
+{
+  "name": "concept-crystallization",
+  "category": "General",
+  "purpose": "Transform vague concepts into precise, actionable definitions with clear boundaries and relationships.",
+  "version": "2.0.0",
+  "server": "ai-cognition",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "concept-crystallization",
+    "description": "Transform vague concepts into precise, actionable definitions with clear boundaries and relationships.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "concept"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "concept": {
+          "type": "string",
+          "description": "concept parameter"
+        },
+        "context": {
+          "type": "object",
+          "description": "context parameter"
+        },
+        "precision_level": {
+          "type": "string",
+          "description": "precision_level parameter"
+        },
+        "include_examples": {
+          "type": "boolean",
+          "description": "include_examples parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "examples": "array",
+      "definition": {
+        "core": "string",
+        "boundaries": "array",
+        "relationships": "array"
+      },
+      "validation": {
+        "precision": "number",
+        "completeness": "number"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "name": "secure-hook-executor",
+  "category": "General",
+  "purpose": "Execute Git hooks in a sandboxed environment with security analysis and blocked operation detection.",
+  "version": "2.0.0",
+  "server": "floyd-core",
+  "whenToUse": "",
+  "whenNotToUse": "",
+  "schema": {
+    "name": "secure-hook-executor",
+    "description": "Execute Git hooks in a sandboxed environment with security analysis and blocked operation detection.",
+    "inputSchema": {
+      "type": "object",
+      "required": [
+        "action",
+        "hook_type",
+        "hook_script"
+      ],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "action parameter"
+        },
+        "context": {
+          "type": "object",
+          "description": "context parameter"
+        },
+        "sandbox": {
+          "type": "boolean",
+          "description": "sandbox parameter"
+        },
+        "timeout": {
+          "type": "number",
+          "description": "timeout parameter"
+        },
+        "hook_type": {
+          "type": "string",
+          "description": "hook_type parameter"
+        },
+        "hook_script": {
+          "type": "string",
+          "description": "hook_script parameter"
+        }
+      }
+    },
+    "outputSchema": {
+      "security": {
+        "risk_level": "string",
+        "violations": "array",
+        "blocked_operations": "array"
+      },
+      "execution": {
+        "stderr": "string",
+        "stdout": "string",
+        "success": "boolean",
+        "duration": "number",
+        "exit_code": "number"
+      },
+      "recommendations": "array"
+    }
+  }
+}
