@@ -354,10 +354,270 @@ header {
   #modalClose:hover { transform: none; }
 }
 
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 6px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(34,211,238,0.2); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(34,211,238,0.35); }
+
+/* ═══════════════════════════════════════════
+   MOBILE-FIRST RESPONSIVE SYSTEM
+   ═══════════════════════════════════════════ */
+
+/* -- Touch targets: minimum 44px on all interactive elements -- */
+button, a, input, [role="tab"], [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* -- Collapsible header on mobile -- */
+.header-content {
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+.header-content.collapsed {
+  max-height: 56px;
+}
+.header-toggle {
+  display: none;
+}
+
+/* -- Sticky controls bar -- */
+.sticky-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(9,9,11,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 8px 0;
+  margin: 0 -16px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-bottom: 1px solid rgba(34,211,238,0.06);
+  transition: box-shadow 0.2s ease;
+}
+.sticky-bar.scrolled {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+/* -- Horizontal scrolling category pills on mobile -- */
+.filter-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+  padding-bottom: 4px;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-scroll .category-pill {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  white-space: nowrap;
+}
+
+/* -- Metric cards compact on mobile -- */
+.metric-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+@media (max-width: 639px) {
+  .metric-card {
+    padding: 10px !important;
+  }
+  .metric-card .text-lg {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* -- Compact card layout for mobile -- */
+@media (max-width: 767px) {
+  .prompt-card {
+    padding: 14px !important;
+  }
+  .prompt-card .card-body {
+    gap: 6px;
+  }
+  .prompt-card .card-footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .prompt-card .card-footer .card-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .prompt-card .card-footer .card-actions button {
+    flex: 1;
+    justify-content: center;
+  }
+  .prompt-card .contract-text {
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* -- Bottom mobile nav -- */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(9,9,11,0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(34,211,238,0.08);
+  padding: 6px 0;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+}
+.bottom-nav-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.bottom-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: #71717a;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+.bottom-nav button:active {
+  background: rgba(34,211,238,0.08);
+}
+.bottom-nav button.active {
+  color: #22d3ee;
+}
+.bottom-nav button svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* -- Full-screen modal on mobile -- */
+@media (max-width: 767px) {
+  .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 92vh !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+}
+
+/* -- Body padding for bottom nav -- */
+@media (max-width: 1023px) {
+  .bottom-nav { display: block; }
+  #app { padding-bottom: 80px !important; }
+}
+
+/* -- Desktop hide bottom nav -- */
+@media (min-width: 1024px) {
+  .bottom-nav { display: none !important; }
+  #app { padding-bottom: 40px !important; }
+  .filter-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
+/* -- Safe area for notch phones -- */
+@supports (padding: max(0px)) {
+  #app {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* -- Dynamic counter animation -- */
+.counter-value {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+.counter-value.bumped {
+  animation: counterBump 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes counterBump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* -- Loading skeleton -- */
+.skeleton {
+  background: linear-gradient(90deg, rgba(34,211,238,0.03) 25%, rgba(34,211,238,0.06) 50%, rgba(34,211,238,0.03) 75%);
+  background-size: 200% 100%;
+  animation: shimmerLoad 1.5s ease-in-out infinite;
+  border-radius: 12px;
+}
+@keyframes shimmerLoad {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* -- Horizontal metric scroll on very small screens -- */
+@media (max-width: 374px) {
+  #metrics {
+    display: flex !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px !important;
+    padding-bottom: 4px;
+  }
+  #metrics::-webkit-scrollbar { display: none; }
+  #metrics .metric-card {
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+}
+
+/* -- Active filter indicator dot -- */
+.filter-active-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 6px rgba(34,211,238,0.5);
+}
+
+/* -- Pull hint on mobile -- */
+.pull-hint {
+  display: none;
+  text-align: center;
+  padding: 8px 0 4px;
+  color: #52525b;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+}
+@media (max-width: 767px) {
+  .pull-hint { display: block; }
+}
+
 </style>
 </head>
 <body class="relative">
@@ -365,70 +625,101 @@ header {
 <div class="ambient-bg"></div>
 <div class="ambient-grid"></div>
 
-<div id="app" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
+<div id="app" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-10">
 
-  <!-- Header -->
-  <header class="text-center mb-8 sm:mb-12">
-    <div class="inline-flex items-center gap-2 mono text-xs text-cyan-400/70 mb-3 tracking-wider uppercase">
-      <span class="w-2 h-2 rounded-full bg-cyan-400 pulse-dot inline-block"></span>
-      <span>System Online</span>
-    </div>
-    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3 bg-gradient-to-r from-cyan-300 via-violet-400 to-pink-400 bg-clip-text text-transparent">
-      Legacy Mission Control
-    </h1>
-    <p class="text-zinc-400 text-sm sm:text-base max-w-2xl mx-auto mb-4">
-      No-fluff prompt payloads for shipping real work. Deterministic execution contracts for solo operators who need leverage, not theater.
-    </p>
-    <div class="inline-flex items-center gap-2 mono text-xs px-3 py-1.5 rounded-full bg-cyan-400/5 border border-cyan-400/20 text-cyan-400">
-      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-      <span id="payloadCount">673 Payloads Loaded</span>
+  <!-- Header (collapsible on mobile) -->
+  <header class="text-center mb-4 sm:mb-12 relative">
+    <button class="header-toggle sm:hidden absolute right-0 top-0 p-2 rounded-lg text-zinc-500 hover:text-zinc-300 transition-colors" id="headerToggle" aria-label="Toggle header">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg>
+    </button>
+    <div class="header-content" id="headerContent">
+      <div class="inline-flex items-center gap-2 mono text-xs text-cyan-400/70 mb-2 sm:mb-3 tracking-wider uppercase">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 pulse-dot inline-block"></span>
+        <span>System Online</span>
+      </div>
+      <h1 class="text-2xl sm:text-5xl font-extrabold tracking-tight mb-2 sm:mb-3 bg-gradient-to-r from-cyan-300 via-violet-400 to-pink-400 bg-clip-text text-transparent">
+        Legacy Mission Control
+      </h1>
+      <p class="text-zinc-400 text-xs sm:text-base max-w-2xl mx-auto mb-3 sm:mb-4 hidden sm:block">
+        No-fluff prompt payloads for shipping real work. Deterministic execution contracts for solo operators who need leverage, not theater.
+      </p>
+      <div class="inline-flex items-center gap-2 mono text-xs px-3 py-1.5 rounded-full bg-cyan-400/5 border border-cyan-400/20 text-cyan-400">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+        <span id="payloadCount">673 Payloads Loaded</span>
+      </div>
     </div>
   </header>
 
   <!-- Dashboard Metrics -->
-  <section id="metrics" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6" aria-label="Dashboard Metrics"></section>
+  <section id="metrics" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3 mb-4 sm:mb-6" aria-label="Dashboard Metrics"></section>
 
-  <!-- Controls -->
-  <section class="flex flex-col sm:flex-row gap-3 mb-6">
-    <div class="relative flex-1">
-      <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="Search payloads by title, category, contract, matrix, or content..."
-        class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-sm text-zinc-200 placeholder-zinc-600 focus-visible:border-cyan-500/50 focus-visible:ring-1 focus-visible:ring-cyan-500/20 transition-colors"
-        aria-label="Search prompts"
-      />
-      <button id="clearSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-400 transition-all duration-200 hover:rotate-90 hidden" aria-label="Clear search">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="flex gap-2">
-      <button id="exportBtn" class="btn-glow focus-visible inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-violet-500/10 border border-violet-500/25 text-violet-400 text-sm mono hover:bg-violet-500/15 transition-colors" aria-label="Export prompts as JSON">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-        Export
-      </button>
-      <button id="resetBtn" class="btn-glow btn-pink focus-visible inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-pink-500/10 border border-pink-500/25 text-pink-400 text-sm mono hover:bg-pink-500/15 transition-colors" aria-label="Reset all data">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-        Reset
-      </button>
-    </div>
+  <!-- Sticky Controls Bar (search + actions) -->
+  <div class="sticky-bar" id="stickyBar">
+    <section class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+      <div class="relative flex-1">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input
+          id="searchInput"
+          type="text"
+          placeholder="Search payloads..."
+          class="w-full pl-10 pr-10 py-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-sm text-zinc-200 placeholder-zinc-600 focus-visible:border-cyan-500/50 focus-visible:ring-1 focus-visible:ring-cyan-500/20 transition-colors"
+          aria-label="Search prompts"
+        />
+        <button id="clearSearch" class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-400 transition-all duration-200 hover:rotate-90 hidden" aria-label="Clear search">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="flex gap-2">
+        <button id="exportBtn" class="btn-glow focus-visible inline-flex items-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-xl bg-violet-500/10 border border-violet-500/25 text-violet-400 text-sm mono hover:bg-violet-500/15 transition-colors" aria-label="Export prompts as JSON">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span class="hidden sm:inline">Export</span>
+        </button>
+        <button id="resetBtn" class="btn-glow btn-pink focus-visible inline-flex items-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-xl bg-pink-500/10 border border-pink-500/25 text-pink-400 text-sm mono hover:bg-pink-500/15 transition-colors" aria-label="Reset all data">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span class="hidden sm:inline">Reset</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Category Filters (horizontal scroll on mobile) -->
+  <section class="mb-4 sm:mb-6" role="tablist" aria-label="Category filters">
+    <div id="categoryFilters" class="filter-scroll"></div>
   </section>
 
-  <!-- Category Filters -->
-  <section id="categoryFilters" class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Category filters"></section>
-
   <!-- Prompt Grid -->
-  <main id="promptGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" role="list" aria-label="Prompt payloads"></main>
+  <main id="promptGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4" role="list" aria-label="Prompt payloads"></main>
 
   <!-- Empty State -->
-  <div id="emptyState" class="hidden text-center py-20">
-    <svg class="w-16 h-16 mx-auto text-zinc-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-    <p class="text-zinc-500 text-lg font-medium">No payloads match your search</p>
-    <p class="text-zinc-600 text-sm mt-1">Try adjusting your search terms or clearing filters</p>
+  <div id="emptyState" class="hidden text-center py-16 sm:py-20">
+    <svg class="w-14 h-14 mx-auto text-zinc-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <p class="text-zinc-500 text-base sm:text-lg font-medium">No payloads match your search</p>
+    <p class="text-zinc-600 text-sm mt-1">Try adjusting your search or filters</p>
   </div>
 
 </div>
+
+<!-- Bottom Mobile Nav -->
+<nav class="bottom-nav" aria-label="Mobile navigation">
+  <div class="bottom-nav-inner">
+    <button data-nav="home" class="active" aria-label="Home">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      Home
+    </button>
+    <button data-nav="search" aria-label="Search">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      Search
+    </button>
+    <button data-nav="favs" aria-label="Favorites">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+      Saved
+    </button>
+    <button data-nav="categories" aria-label="Categories">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+      Filter
+    </button>
+  </div>
+</nav>
 
 <!-- Modal Overlay -->
 <div id="modalOverlay" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Prompt details">
@@ -1279,6 +1570,11 @@ function updateMetrics() {
     emerald: { bg: 'bg-emerald-400/5', border: 'border-emerald-400/15', text: 'text-emerald-400', valueText: 'text-emerald-300' }
   };
 
+  const prevValues = {};
+  $metrics.querySelectorAll('.counter-value').forEach(el => {
+    prevValues[el.dataset.metric] = el.textContent;
+  });
+
   $metrics.innerHTML = metrics.map(m => {
     const c = colorMap[m.color];
     return `<div class="metric-card glass-panel rounded-xl p-4 ${c.bg} border ${c.border}">
@@ -1286,9 +1582,18 @@ function updateMetrics() {
         <svg class="w-3.5 h-3.5 ${c.text}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${m.icon}"/></svg>
         <span class="mono text-[10px] uppercase tracking-wider ${c.text}">${m.label}</span>
       </div>
-      <div class="text-lg font-bold ${c.valueText} truncate">${m.value}</div>
+      <div class="counter-value text-lg font-bold ${c.valueText} truncate" data-metric="${m.label}">${m.value}</div>
     </div>`;
   }).join('');
+
+  // Bump animation on changed values
+  $metrics.querySelectorAll('.counter-value').forEach(el => {
+    const label = el.dataset.metric;
+    if (prevValues[label] !== undefined && prevValues[label] !== el.textContent) {
+      el.classList.add('bumped');
+      el.addEventListener('animationend', () => el.classList.remove('bumped'), { once: true });
+    }
+  });
 }
 
 // ── Category Filters ───────────────────────────────────────────
@@ -1350,39 +1655,41 @@ function renderPrompts() {
     const isFav = favorites.includes(p.id);
 
     return `<article
-      class="card-enter card-hover glass-panel rounded-2xl p-5 flex flex-col"
+      class="prompt-card card-enter card-hover glass-panel rounded-2xl p-5 flex flex-col"
       style="animation-delay: ${Math.min(i * 30, 300)}ms"
       role="listitem"
       data-id="${p.id}"
     >
-      <div class="flex items-start justify-between mb-3">
-        <span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${p.category}</span>
-        <button
-          class="fav-btn focus-visible p-1 rounded-lg hover:bg-zinc-800/50 transition-colors"
-          data-fav-id="${p.id}"
-          aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}"
-        >
-          <svg class="w-4 h-4 ${isFav ? 'text-pink-400 fill-pink-400' : 'text-zinc-600'}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-        </button>
+      <div class="card-body flex flex-col flex-1">
+        <div class="flex items-start justify-between mb-3">
+          <span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${p.category}</span>
+          <button
+            class="fav-btn focus-visible p-1 rounded-lg hover:bg-zinc-800/50 transition-colors"
+            data-fav-id="${p.id}"
+            aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}"
+          >
+            <svg class="w-4 h-4 ${isFav ? 'text-pink-400 fill-pink-400' : 'text-zinc-600'}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          </button>
+        </div>
+
+        <h3 class="text-sm font-semibold text-zinc-100 mb-2 leading-snug">${p.title}</h3>
+
+        <p class="contract-text text-xs text-zinc-500 mb-3 line-clamp-2 leading-relaxed">${p.contract}</p>
+
+        <div class="mb-3 space-y-1">
+          ${p.matrix.map(m => `<div class="flex items-start gap-1.5 text-[10px] text-zinc-600">
+            <svg class="w-3 h-3 text-zinc-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="truncate">${m}</span>
+          </div>`).join('')}
+        </div>
       </div>
 
-      <h3 class="text-sm font-semibold text-zinc-100 mb-2 leading-snug">${p.title}</h3>
-
-      <p class="text-xs text-zinc-500 mb-3 line-clamp-2 leading-relaxed">${p.contract}</p>
-
-      <div class="mb-3 space-y-1">
-        ${p.matrix.map(m => `<div class="flex items-start gap-1.5 text-[10px] text-zinc-600">
-          <svg class="w-3 h-3 text-zinc-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span class="truncate">${m}</span>
-        </div>`).join('')}
-      </div>
-
-      <div class="mt-auto flex items-center justify-between pt-3 border-t border-zinc-800/50">
+      <div class="card-footer mt-auto flex items-center justify-between pt-3 border-t border-zinc-800/50">
         <div class="flex items-center gap-1 text-[10px] mono text-zinc-600">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
           <span>${usage} ${usage === 1 ? 'copy' : 'copies'}</span>
         </div>
-        <div class="flex items-center gap-1.5">
+        <div class="card-actions flex items-center gap-1.5">
           <button
             class="detail-btn focus-visible mono text-[10px] px-2.5 py-1.5 rounded-lg bg-zinc-800/80 border border-zinc-700/50 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-all"
             data-detail-id="${p.id}"
@@ -1605,6 +1912,8 @@ $categoryFilters.addEventListener('click', (e) => {
   if (!btn) return;
   activeCategory = btn.dataset.category;
   safeSetLS(LS_CATEGORY, activeCategory);
+  // Clear favorites mode when selecting a category
+  delete $categoryFilters.dataset.favMode;
   renderFilters();
   updateMetrics();
   renderPrompts();
@@ -1635,6 +1944,156 @@ $resetBtn.addEventListener('click', resetAll);
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeModal();
 });
+
+// ── Mobile Interactions ─────────────────────────────────────────
+
+// Header toggle (collapse/expand on mobile)
+const $headerToggle = document.getElementById('headerToggle');
+const $headerContent = document.getElementById('headerContent');
+if ($headerToggle && $headerContent) {
+  // Auto-collapse on mobile after 3 seconds
+  const autoCollapse = () => {
+    if (window.innerWidth < 640) {
+      $headerContent.classList.add('collapsed');
+      $headerToggle.querySelector('svg').style.transform = 'rotate(180deg)';
+    }
+  };
+  setTimeout(autoCollapse, 3000);
+
+  $headerToggle.addEventListener('click', () => {
+    const isCollapsed = $headerContent.classList.toggle('collapsed');
+    $headerToggle.querySelector('svg').style.transform = isCollapsed ? 'rotate(180deg)' : '';
+  });
+}
+
+// Sticky bar scroll shadow
+const $stickyBar = document.getElementById('stickyBar');
+if ($stickyBar) {
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        $stickyBar.classList.toggle('scrolled', window.scrollY > 10);
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+  }, { passive: true });
+}
+
+// Bottom nav button handling
+const $bottomNav = document.querySelector('.bottom-nav');
+if ($bottomNav) {
+  $bottomNav.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-nav]');
+    if (!btn) return;
+
+    // Update active state
+    $bottomNav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const action = btn.dataset.nav;
+    switch (action) {
+      case 'home':
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        break;
+      case 'search':
+        $searchInput.focus();
+        $searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        break;
+      case 'favs': {
+        // Toggle favorites-only view
+        const showingFavs = $categoryFilters.dataset.favMode === 'true';
+        if (showingFavs) {
+          // Exit favorites mode — restore previous category
+          delete $categoryFilters.dataset.favMode;
+          renderFilters();
+          renderPrompts();
+          showToast('Showing all payloads', 'info');
+        } else {
+          // Enter favorites mode
+          $categoryFilters.dataset.favMode = 'true';
+          // Visually deactivate all category pills
+          $categoryFilters.querySelectorAll('.category-pill').forEach(p => {
+            p.classList.remove('bg-cyan-400/15', 'border-cyan-400/40', 'text-cyan-300', 'shadow-[0_0_12px_rgba(34,211,238,0.1)]');
+            p.classList.add('bg-zinc-900/60', 'border-zinc-800', 'text-zinc-400');
+            p.setAttribute('aria-selected', 'false');
+          });
+          renderFavFilteredPrompts();
+          showToast(`Showing ${favorites.length} favorites`, 'info');
+        }
+        break;
+      }
+      case 'categories':
+        $categoryFilters.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        break;
+    }
+  });
+}
+
+// Render only favorited prompts (for favs nav button)
+function renderFavFilteredPrompts() {
+  const favPrompts = PROMPTS.filter(p => favorites.includes(p.id));
+  if (favPrompts.length === 0) {
+    $promptGrid.innerHTML = '';
+    $emptyState.classList.remove('hidden');
+    return;
+  }
+  $emptyState.classList.add('hidden');
+  // Reuse the card rendering by temporarily swapping filtered results
+  const savedCat = activeCategory;
+  const savedQuery = searchQuery;
+  activeCategory = 'All';
+  searchQuery = '';
+
+  $promptGrid.innerHTML = favPrompts.map((p, i) => {
+    const colors = CATEGORY_COLORS[p.category];
+    const usage = usageCounts[p.id] || 0;
+    const isFav = true; // all are favs in this view
+
+    return `<article
+      class="prompt-card card-enter card-hover glass-panel rounded-2xl p-5 flex flex-col"
+      style="animation-delay: ${Math.min(i * 30, 300)}ms"
+      role="listitem"
+      data-id="${p.id}"
+    >
+      <div class="card-body flex flex-col flex-1">
+        <div class="flex items-start justify-between mb-3">
+          <span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${p.category}</span>
+          <button
+            class="fav-btn focus-visible p-1 rounded-lg hover:bg-zinc-800/50 transition-colors"
+            data-fav-id="${p.id}"
+            aria-label="Remove from favorites"
+          >
+            <svg class="w-4 h-4 text-pink-400 fill-pink-400" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          </button>
+        </div>
+        <h3 class="text-sm font-semibold text-zinc-100 mb-2 leading-snug">${p.title}</h3>
+        <p class="contract-text text-xs text-zinc-500 mb-3 line-clamp-2 leading-relaxed">${p.contract}</p>
+        <div class="mb-3 space-y-1">
+          ${p.matrix.map(m => `<div class="flex items-start gap-1.5 text-[10px] text-zinc-600">
+            <svg class="w-3 h-3 text-zinc-700 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span class="truncate">${m}</span>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="card-footer mt-auto flex items-center justify-between pt-3 border-t border-zinc-800/50">
+        <div class="flex items-center gap-1 text-[10px] mono text-zinc-600">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+          <span>${usage} ${usage === 1 ? 'copy' : 'copies'}</span>
+        </div>
+        <div class="card-actions flex items-center gap-1.5">
+          <button class="detail-btn focus-visible mono text-[10px] px-2.5 py-1.5 rounded-lg bg-zinc-800/80 border border-zinc-700/50 text-zinc-400 hover:text-zinc-200 hover:border-zinc-600 transition-all" data-detail-id="${p.id}">Details</button>
+          <button class="copy-btn focus-visible btn-glow mono text-[10px] px-2.5 py-1.5 rounded-lg bg-cyan-400/10 border border-cyan-400/25 text-cyan-400 hover:bg-cyan-400/15 transition-all" data-copy-id="${p.id}">Copy Payload</button>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  // Restore saved state
+  activeCategory = savedCat;
+  searchQuery = savedQuery;
+}
 
 // ── Init ───────────────────────────────────────────────────────
 $searchInput.value = searchQuery;
