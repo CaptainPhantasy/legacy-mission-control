@@ -365,24 +365,69 @@ body {
   animation: pulseAccent 2s ease-in-out infinite;
 }
 
+.category-deck {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(34,211,238,0.18);
+  background: linear-gradient(135deg, rgba(8,145,178,0.08), rgba(24,24,27,0.72));
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+@media (min-width: 1024px) {
+  .category-deck {
+    flex: 1 1 420px;
+    max-width: 560px;
+  }
+}
+
+.category-deck-label {
+  margin-bottom: 8px;
+}
+
 .category-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   will-change: transform;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.08);
 }
+
 .category-pill:hover {
   transform: translateY(-1px);
 }
+
 .category-pill:active {
   transform: scale(0.97);
   transition-duration: 0.08s;
 }
+
 .category-pill.active {
-  box-shadow: 0 0 16px rgba(34,211,238,0.12);
+  box-shadow: 0 0 0 1px rgba(34,211,238,0.28), 0 0 24px rgba(34,211,238,0.18);
+}
+
+.category-pill-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 22px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  color: currentColor;
+  opacity: 0.86;
 }
 
 .focus-visible:focus-visible,
 #searchInput:focus-visible,
-#sortSelect:focus-visible {
+#sortSelect:focus-visible,
+#themeSelect:focus-visible {
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(34,211,238,0.14);
@@ -428,7 +473,18 @@ body {
 .metric-card:nth-child(4) { animation-delay: 120ms; }
 .metric-card:nth-child(5) { animation-delay: 160ms; }
 
-/* Detail button hover */
+/* Card action buttons */
+.fav-btn,
+.detail-btn,
+.copy-btn {
+  min-height: 46px;
+}
+.fav-btn {
+  min-width: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 .detail-btn {
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
@@ -439,8 +495,6 @@ body {
   transform: translateY(0.5px) scale(0.97);
   transition-duration: 0.08s;
 }
-
-/* Copy button hover lift */
 .copy-btn {
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
@@ -517,7 +571,8 @@ header {
   pointer-events: none;
 }
 
-#sortSelect {
+#sortSelect,
+#themeSelect {
   appearance: none;
   -webkit-appearance: none;
   min-height: 44px;
@@ -846,22 +901,25 @@ button, a, input, [role="tab"], [role="button"] {
     -webkit-line-clamp: 3;
   }
 
+  .category-deck {
+    padding: 10px;
+  }
+
   .filter-scroll {
-    flex-wrap: wrap;
-    overflow-x: clip;
-    scroll-snap-type: none;
-    max-height: calc(100dvh - 96px - env(safe-area-inset-bottom));
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    max-height: none;
+    overscroll-behavior-x: contain;
   }
 
   .filter-scroll .category-pill {
-    flex: 1 1 calc(50% - 8px);
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: max-content;
     justify-content: center;
-    white-space: normal;
+    white-space: nowrap;
     text-align: center;
-    overflow-wrap: anywhere;
   }
 
   .bottom-nav {
@@ -1141,6 +1199,42 @@ body::after {
   opacity: 0.7;
 }
 
+.category-tag {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  max-width: min(100%, 18rem);
+  padding: 6px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 1.1;
+  font-weight: 800;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.18);
+}
+
+.category-tag::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: currentColor;
+  box-shadow: 0 0 12px currentColor;
+  flex: 0 0 auto;
+}
+
+body[data-theme-palette] .category-tag {
+  background: color-mix(in oklab, var(--tear-accent), transparent 82%);
+  border-color: color-mix(in oklab, var(--tear-accent), transparent 42%);
+  color: var(--tear-text);
+}
+
 .command-eyebrow {
   letter-spacing: 0.28em;
   color: #67e8f9;
@@ -1351,6 +1445,10 @@ body[data-theme-palette] .category-pill.active {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
+        <div class="category-deck" aria-label="Category filters">
+          <div class="category-deck-label mono text-[10px] uppercase tracking-[0.22em] text-cyan-300/80">Categories</div>
+          <div id="categoryFilters" class="filter-scroll" role="tablist" aria-label="Category filters"></div>
+        </div>
 
         <div class="flex flex-col sm:flex-row gap-2 lg:w-auto">
           <div class="inline-flex rounded-xl bg-zinc-950/70 border border-zinc-800 p-1" role="group" aria-label="Payload view">
@@ -1359,7 +1457,7 @@ body[data-theme-palette] .category-pill.active {
           </div>
           <label class="select-shell min-w-[180px]">
             <span class="sr-only">Sort prompts</span>
-            <select id="sortSelect" class="focus-visible w-full rounded-xl bg-zinc-950/70 border border-zinc-800 text-sm text-zinc-300 pl-3 pr-10 py-2.5">
+            <select id="sortSelect" class="focus-visible w-full rounded-xl bg-zinc-950/70 border border-zinc-800 text-sm text-zinc-300 pl-3 pr-10 py-2.5" aria-label="Sort prompts">
               <option value="recommended">Recommended order</option>
               <option value="popular">Most copied</option>
               <option value="title">Title A-Z</option>
@@ -1386,10 +1484,6 @@ body[data-theme-palette] .category-pill.active {
     </section>
   </div>
 
-  <!-- Category Filters (horizontal scroll on mobile) -->
-  <section class="mb-4 sm:mb-6" role="tablist" aria-label="Category filters">
-    <div id="categoryFilters" class="filter-scroll"></div>
-  </section>
 
   <!-- Prompt Grid -->
   <main id="promptGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4" role="list" aria-label="Prompt payloads" tabindex="-1"></main>
@@ -2471,7 +2565,7 @@ function showToast(message, type = 'success') {
     warn: 'bg-amber-500/10 border-amber-500/30 text-amber-400'
   };
   const toast = document.createElement('div');
-  toast.className = `toast-enter mono text-xs px-4 py-2.5 rounded-xl border backdrop-blur-md ${colors[type] || colors.success}`;
+  toast.className = `toast toast-enter mono text-xs px-4 py-2.5 rounded-xl border backdrop-blur-md ${colors[type] || colors.success}`;
   toast.textContent = message;
   $toastContainer.appendChild(toast);
   setTimeout(() => {
@@ -2564,14 +2658,14 @@ function renderFilters() {
     const isActive = cat === activeCategory;
     const count = cat === 'All' ? PROMPTS.length : counts[cat] || 0;
     const activeClasses = isActive && viewMode === 'all'
-      ? 'bg-cyan-400/15 border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.1)]'
-      : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:text-zinc-300 hover:border-zinc-700';
+      ? 'active bg-cyan-400/20 border-cyan-300/70 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.18)]'
+      : 'bg-zinc-950/70 border-zinc-700/80 text-zinc-200 hover:text-white hover:border-cyan-400/55';
     return `<button
       role="tab"
       aria-selected="${isActive && viewMode === 'all'}"
       data-category="${escapeHTML(cat)}"
-      class="category-pill focus-visible mono text-xs px-3.5 py-1.5 rounded-lg border transition-all ${activeClasses}"
-    ><span>${escapeHTML(cat)}</span><span class="ml-2 text-[10px] text-zinc-600">${count}</span></button>`;
+      class="category-pill focus-visible mono text-[11px] px-3.5 py-2 rounded-xl border transition-all ${activeClasses}"
+    ><span>${escapeHTML(cat)}</span><span class="category-pill-count text-[10px]">${count}</span></button>`;
   }).join('');
 }
 
@@ -2654,8 +2748,8 @@ function renderPromptCard(p, i) {
     data-highlight="${highlighted}"
   >
     <div class="card-body flex flex-col flex-1">
-      <div class="flex items-start justify-between mb-3 gap-3">
-        <span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${category}</span>
+      <div class="flex items-start justify-between mb-4 gap-3">
+        <span class="category-tag mono ${colors.bg} ${colors.text} border ${colors.border}" aria-label="Category: ${category}">${category}</span>
         <button
           class="fav-btn focus-visible p-1 rounded-lg hover:bg-zinc-800/50 transition-colors"
           data-fav-id="${p.id}"
