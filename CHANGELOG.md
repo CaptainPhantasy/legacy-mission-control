@@ -42,3 +42,10 @@
     - Files/areas touched: `mission-control-prompt-library.html`
     - Tests run: Puppeteer UI baseline audits at 320×568, 390×844, 430×932, and 1440×900; corrected 390×844 workflow regression; Node inline script syntax validation; `git diff --check`; custom secret scan; Floyd proof runs.
     - Result: Category rail and card tags are visible without page/card overflow; 21 category pills render with first chip `All / 873`; sampled prompt cards had zero overflowing children; all visible controls are named; all interactive targets meet the 44px gate after active-state scaling; workflow regression loaded 873 payloads, filtered/searched to 96, opened/copy-ready modal, saved 1 card, persisted High Contrast, exported successfully, and rendered empty state.
+
+- [2026-05-10] Changed category filters from hidden scroll rail to all-visible grid
+    - What changed: Replaced the horizontally scrolling category rail with a wrapping grid, removed category deck clipping, and kept search/actions below the full category set.
+    - Why: User inspection rejected hidden/obscured categories; all categories must be shown at once.
+    - Files/areas touched: `mission-control-prompt-library.html`, `CHANGELOG.md`, `qa/final-push-20260509-094455/report.md`
+    - Tests run: User visual inspection in default browser; Node inline script syntax validation; `git diff --check`; staged secret scan.
+    - Result: User accepted the current all-visible category layout and requested commit.

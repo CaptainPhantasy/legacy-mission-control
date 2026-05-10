@@ -368,7 +368,7 @@ body {
 .category-deck {
   width: 100%;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(34,211,238,0.18);
   background: linear-gradient(135deg, rgba(8,145,178,0.08), rgba(24,24,27,0.72));
   border-radius: 18px;
@@ -378,8 +378,7 @@ body {
 
 @media (min-width: 1024px) {
   .category-deck {
-    flex: 1 1 420px;
-    max-width: 560px;
+    max-width: none;
   }
 }
 
@@ -675,23 +674,21 @@ button, a, input, [role="tab"], [role="button"] {
   box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
-/* -- Horizontal scrolling category pills on mobile -- */
+/* -- All-visible category grid -- */
 .filter-scroll {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
   gap: 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-snap-type: x proximity;
-  padding-bottom: 4px;
+  overflow: visible;
+  padding-bottom: 0;
 }
 .filter-scroll::-webkit-scrollbar { display: none; }
 .filter-scroll .category-pill {
-  flex-shrink: 0;
-  scroll-snap-align: start;
-  white-space: nowrap;
+  min-width: 0;
+  width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
 }
 
 /* -- Metric cards compact on mobile -- */
@@ -860,9 +857,9 @@ button, a, input, [role="tab"], [role="button"] {
   }
 
   .sticky-bar {
-    max-height: calc(100dvh - 76px - env(safe-area-inset-bottom));
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    max-height: none;
+    overflow: visible;
+    overscroll-behavior: auto;
     margin-left: 0;
     margin-right: 0;
     padding-left: 0;
@@ -906,19 +903,15 @@ button, a, input, [role="tab"], [role="button"] {
   }
 
   .filter-scroll {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x proximity;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
     max-height: none;
-    overscroll-behavior-x: contain;
   }
 
   .filter-scroll .category-pill {
-    flex: 0 0 auto;
-    min-width: max-content;
+    min-width: 0;
     justify-content: center;
-    white-space: nowrap;
+    white-space: normal;
     text-align: center;
   }
 
@@ -1430,7 +1423,7 @@ body[data-theme-palette] .category-pill.active {
         </div>
         <div class="hidden lg:block mono text-[11px] text-zinc-500">Search · Sort · Save · Inspect · Export</div>
       </div>
-      <div class="flex flex-col lg:flex-row gap-3">
+      <div class="flex flex-col gap-3">
         <div class="relative flex-1">
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input
