@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Legacy Mission Control — Prompt Library</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/lmc-icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+<meta name="theme-color" content="#09090b">
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&display=swap');
@@ -423,6 +428,96 @@ body {
   opacity: 0.86;
 }
 
+.category-mobile-toggle {
+  display: none;
+  width: 100%;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid rgba(34,211,238,0.22);
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(9,9,11,0.72);
+  color: #e4e4e7;
+  text-align: left;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.category-mobile-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.category-mobile-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(103,232,249,0.82);
+}
+
+.category-mobile-summary {
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.25;
+  color: #f4f4f5;
+}
+
+.category-toggle-action {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: rgba(34,211,238,0.12);
+  color: #a5f3fc;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.category-mobile-hint {
+  display: none;
+  margin-top: 10px;
+  font-size: 10px;
+  line-height: 1.45;
+  color: #a1a1aa;
+}
+
+@media (max-width: 767px) {
+  .category-deck {
+    order: 2;
+    overflow: clip;
+  }
+
+  .category-mobile-toggle {
+    display: flex;
+  }
+
+  .category-deck-label {
+    display: none;
+  }
+
+  .category-deck:not([data-mobile-open="true"]) .filter-scroll,
+  .category-deck:not([data-mobile-open="true"]) .category-mobile-hint {
+    display: none;
+  }
+
+  .category-deck[data-mobile-open="true"] .filter-scroll {
+    display: grid;
+    margin-top: 10px;
+    max-height: min(58dvh, 560px);
+    overflow-y: auto;
+    overflow-x: clip;
+    overscroll-behavior: contain;
+    padding-right: 2px;
+  }
+
+  .category-deck[data-mobile-open="true"] .category-mobile-hint {
+    display: block;
+  }
+}
+
 .focus-visible:focus-visible,
 #searchInput:focus-visible,
 #sortSelect:focus-visible,
@@ -542,8 +637,51 @@ header {
 }
 
 .command-panel {
-  border: 1px solid rgba(34,211,238,0.12);
-  box-shadow: 0 18px 60px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.03);
+	border: 1px solid rgba(34,211,238,0.12);
+	box-shadow: 0 18px 60px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.mobile-quick-controls {
+	min-width: 0;
+}
+
+@media (max-width: 767px) {
+	.mobile-quick-controls {
+		order: 1;
+		display: grid;
+		grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+		align-items: stretch;
+		gap: 6px;
+	}
+
+	.mobile-quick-controls .inline-flex[role="group"] {
+		width: 100%;
+	}
+
+	.mobile-quick-controls .view-toggle,
+	.mobile-quick-controls #sortSelect {
+		min-height: 40px;
+		font-size: 11px;
+	}
+
+	.mobile-quick-controls .view-toggle {
+		flex: 1 1 0;
+		padding: 7px 8px;
+	}
+
+	.mobile-sort-shell {
+		min-width: 0 !important;
+	}
+
+	.mobile-quick-controls #sortSelect {
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+
+	.mobile-theme-shell,
+	.mobile-secondary-actions {
+		display: none !important;
+	}
 }
 
 .view-toggle[aria-pressed="true"] {
@@ -785,19 +923,56 @@ button, a, input, [role="tab"], [role="button"] {
 /* -- Full-screen modal on mobile -- */
 @media (max-width: 767px) {
   .modal-content {
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    border-radius: 20px 20px 0 0 !important;
-    max-height: calc(100dvh - 4px - env(safe-area-inset-top)) !important;
-    overflow-y: auto !important;
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-}
+		display: flex;
+		flex-direction: column;
+		max-width: 100% !important;
+		width: 100% !important;
+		height: calc(100dvh - 4px - env(safe-area-inset-top)) !important;
+		max-height: calc(100dvh - 4px - env(safe-area-inset-top)) !important;
+		margin: 0 !important;
+		border-radius: 20px 20px 0 0 !important;
+		overflow: hidden !important;
+		position: fixed !important;
+		bottom: 0 !important;
+		left: 0 !important;
+		right: 0 !important;
+  }
 
-/* -- Body padding for bottom nav -- */
+  .modal-prompt-header {
+		flex: 0 0 auto;
+		margin-bottom: 14px !important;
+  }
+
+  .modal-prompt-title {
+		flex: 0 0 auto;
+		margin-bottom: 12px !important;
+  }
+
+  .modal-prompt-body {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		padding-right: 2px;
+  }
+
+  .modal-prompt-body > div {
+		min-height: 0;
+  }
+
+  .prompt-payload-panel {
+		max-height: none !important;
+		min-height: min(34dvh, 280px);
+  }
+
+  .modal-prompt-footer {
+		flex: 0 0 auto;
+		margin-top: 14px !important;
+  }
+
+  }
+
+  /* -- Body padding for bottom nav -- */
 @media (max-width: 1023px) {
   .bottom-nav { display: block; }
   #app { padding-bottom: 80px !important; }
@@ -1438,17 +1613,25 @@ body[data-theme-palette] .category-pill.active {
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
         </div>
-        <div class="category-deck" aria-label="Category filters">
+        <div class="category-deck" data-mobile-open="false" aria-label="Category filters">
+          <button id="categoryToggle" class="category-mobile-toggle focus-visible" type="button" aria-expanded="false" aria-controls="categoryFilters">
+            <span class="category-mobile-copy">
+              <span class="category-mobile-eyebrow mono">Categories</span>
+              <span id="categorySummary" class="category-mobile-summary">All categories · 873 payloads</span>
+            </span>
+            <span class="category-toggle-action mono" id="categoryToggleAction">Show all</span>
+          </button>
           <div class="category-deck-label mono text-[10px] uppercase tracking-[0.22em] text-cyan-300/80">Categories</div>
           <div id="categoryFilters" class="filter-scroll" role="tablist" aria-label="Category filters"></div>
+          <p class="category-mobile-hint mono">All 21 categories are available here. Choose one to collapse the picker and return to payloads.</p>
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-2 lg:w-auto">
+        <div class="mobile-quick-controls flex flex-col sm:flex-row gap-2 lg:w-auto">
           <div class="inline-flex rounded-xl bg-zinc-950/70 border border-zinc-800 p-1" role="group" aria-label="Payload view">
             <button id="viewAllBtn" class="view-toggle focus-visible mono text-xs px-3 py-2 rounded-lg border border-transparent text-zinc-400 transition-all" aria-pressed="true">All</button>
             <button id="viewFavsBtn" class="view-toggle focus-visible mono text-xs px-3 py-2 rounded-lg border border-transparent text-zinc-400 transition-all" aria-pressed="false">Saved</button>
           </div>
-          <label class="select-shell min-w-[180px]">
+          <label class="select-shell mobile-sort-shell min-w-[180px]">
             <span class="sr-only">Sort prompts</span>
             <select id="sortSelect" class="focus-visible w-full rounded-xl bg-zinc-950/70 border border-zinc-800 text-sm text-zinc-300 pl-3 pr-10 py-2.5" aria-label="Sort prompts">
               <option value="recommended">Recommended order</option>
@@ -1457,11 +1640,11 @@ body[data-theme-palette] .category-pill.active {
               <option value="category">Category</option>
             </select>
           </label>
-          <label class="select-shell min-w-[170px]">
+          <label class="select-shell mobile-theme-shell min-w-[170px]">
             <span class="sr-only">Theme palette</span>
             <select id="themeSelect" class="focus-visible w-full rounded-xl bg-zinc-950/70 border border-zinc-800 text-sm text-zinc-300 pl-3 pr-10 py-2.5" aria-label="Theme palette"></select>
           </label>
-          <div class="flex gap-2">
+          <div class="mobile-secondary-actions flex gap-2">
             <button id="exportBtn" class="btn-glow focus-visible inline-flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-xl bg-violet-500/10 border border-violet-500/25 text-violet-400 text-sm mono hover:bg-violet-500/15 transition-colors" aria-label="Export prompts as JSON">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               <span class="hidden sm:inline">Export</span>
@@ -2518,6 +2701,10 @@ const $metrics = document.getElementById('metrics');
 const $searchInput = document.getElementById('searchInput');
 const $clearSearch = document.getElementById('clearSearch');
 const $categoryFilters = document.getElementById('categoryFilters');
+const $categoryDeck = document.querySelector('.category-deck');
+const $categoryToggle = document.getElementById('categoryToggle');
+const $categorySummary = document.getElementById('categorySummary');
+const $categoryToggleAction = document.getElementById('categoryToggleAction');
 const $promptGrid = document.getElementById('promptGrid');
 const $emptyState = document.getElementById('emptyState');
 const $exportBtn = document.getElementById('exportBtn');
@@ -2641,25 +2828,55 @@ function escapeHTML(value) {
     .replace(/'/g, '&#39;');
 }
 
-function renderFilters() {
-  const counts = PROMPTS.reduce((acc, prompt) => {
-    acc[prompt.category] = (acc[prompt.category] || 0) + 1;
-    return acc;
-  }, {});
+function categoryCounts() {
+	return PROMPTS.reduce((acc, prompt) => {
+		acc[prompt.category] = (acc[prompt.category] || 0) + 1;
+		return acc;
+	}, {});
+}
 
-  $categoryFilters.innerHTML = CATEGORIES.map(cat => {
-    const isActive = cat === activeCategory;
-    const count = cat === 'All' ? PROMPTS.length : counts[cat] || 0;
-    const activeClasses = isActive && viewMode === 'all'
-      ? 'active bg-cyan-400/20 border-cyan-300/70 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.18)]'
-      : 'bg-zinc-950/70 border-zinc-700/80 text-zinc-200 hover:text-white hover:border-cyan-400/55';
-    return `<button
-      role="tab"
-      aria-selected="${isActive && viewMode === 'all'}"
-      data-category="${escapeHTML(cat)}"
-      class="category-pill focus-visible mono text-[11px] px-3.5 py-2 rounded-xl border transition-all ${activeClasses}"
-    ><span>${escapeHTML(cat)}</span><span class="category-pill-count text-[10px]">${count}</span></button>`;
-  }).join('');
+function categoryCount(category, counts = categoryCounts()) {
+	return category === 'All' ? PROMPTS.length : counts[category] || 0;
+}
+
+function updateCategorySummary(counts = categoryCounts()) {
+	if (!$categorySummary || !$categoryToggleAction) return;
+	const activeLabel = activeCategory === 'All' ? 'All categories' : activeCategory;
+	const count = categoryCount(activeCategory, counts);
+	const noun = count === 1 ? 'payload' : 'payloads';
+	$categorySummary.textContent = `${activeLabel} · ${count} ${noun}`;
+	$categoryToggleAction.textContent = $categoryDeck?.dataset.mobileOpen === 'true' ? 'Hide' : 'Show all';
+}
+
+function setMobileCategoryOpen(isOpen) {
+	if (!$categoryDeck || !$categoryToggle) return;
+	const nextState = Boolean(isOpen);
+	$categoryDeck.dataset.mobileOpen = String(nextState);
+	$categoryToggle.setAttribute('aria-expanded', String(nextState));
+	updateCategorySummary();
+}
+
+function isMobileCategoryViewport() {
+	return window.matchMedia('(max-width: 767px)').matches;
+}
+
+function renderFilters() {
+	const counts = categoryCounts();
+
+	$categoryFilters.innerHTML = CATEGORIES.map(cat => {
+		const isActive = cat === activeCategory;
+		const count = categoryCount(cat, counts);
+		const activeClasses = isActive && viewMode === 'all'
+			? 'active bg-cyan-400/20 border-cyan-300/70 text-cyan-100 shadow-[0_0_18px_rgba(34,211,238,0.18)]'
+			: 'bg-zinc-950/70 border-zinc-700/80 text-zinc-200 hover:text-white hover:border-cyan-400/55';
+		return `<button
+			role="tab"
+			aria-selected="${isActive && viewMode === 'all'}"
+			data-category="${escapeHTML(cat)}"
+			class="category-pill focus-visible mono text-[11px] px-3.5 py-2 rounded-xl border transition-all ${activeClasses}"
+		><span>${escapeHTML(cat)}</span><span class="category-pill-count text-[10px]">${count}</span></button>`;
+	}).join('');
+	updateCategorySummary(counts);
 }
 
 // ── Search & Filter Logic ──────────────────────────────────────
@@ -2875,16 +3092,16 @@ function openModal(id) {
   </li>`).join('');
 
   $modalContent.innerHTML = `
-    <div class="flex items-center justify-between mb-6">
-      <span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${category}</span>
+    <div class="modal-prompt-header flex items-center justify-between mb-6">
+			<span class="mono text-[10px] px-2 py-0.5 rounded-md ${colors.bg} ${colors.text} border ${colors.border}">${category}</span>
       <button id="modalClose" class="focus-visible p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300 transition-colors" aria-label="Close modal">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
 
-    <h2 id="modalTitle" class="text-xl font-bold text-zinc-100 mb-4">${title}</h2>
+    <h2 id="modalTitle" class="modal-prompt-title text-xl font-bold text-zinc-100 mb-4">${title}</h2>
 
-    <div class="space-y-5">
+    <div class="modal-prompt-body space-y-5">
       <div>
         <h3 class="mono text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Contract</h3>
         <p class="text-sm text-zinc-300 leading-relaxed">${contract}</p>
@@ -2897,11 +3114,11 @@ function openModal(id) {
 
       <div>
         <h3 class="mono text-[10px] uppercase tracking-wider text-zinc-500 mb-2">Prompt Payload</h3>
-        <pre class="text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/50 rounded-xl p-4 border border-zinc-800/50 max-h-64 overflow-y-auto">${payload}</pre>
+        <pre class="prompt-payload-panel text-xs text-zinc-300 leading-relaxed whitespace-pre-wrap bg-zinc-950/50 rounded-xl p-4 border border-zinc-800/50 max-h-64 overflow-y-auto">${payload}</pre>
       </div>
     </div>
 
-    <div class="flex items-center justify-between mt-6 pt-4 border-t border-zinc-800/50">
+    <div class="modal-prompt-footer flex items-center justify-between mt-6 pt-4 border-t border-zinc-800/50">
       <span class="mono text-[10px] text-zinc-600">${usage} ${usage === 1 ? 'copy' : 'copies'}</span>
       <button
         id="modalCopyBtn"
@@ -3003,16 +3220,23 @@ $promptGrid.addEventListener('click', (e) => {
 });
 
 $categoryFilters.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-category]');
-  if (!btn) return;
-  activeCategory = btn.dataset.category;
-  viewMode = 'all';
-  safeSetLS(LS_CATEGORY, activeCategory);
-  safeSetLS(LS_VIEW, viewMode);
-  renderFilters();
-  updateMetrics();
-  renderPrompts();
+	const btn = e.target.closest('[data-category]');
+	if (!btn) return;
+	activeCategory = btn.dataset.category;
+	viewMode = 'all';
+	safeSetLS(LS_CATEGORY, activeCategory);
+	safeSetLS(LS_VIEW, viewMode);
+	renderFilters();
+	updateMetrics();
+	renderPrompts();
+	if (isMobileCategoryViewport()) setMobileCategoryOpen(false);
 });
+
+if ($categoryToggle) {
+	$categoryToggle.addEventListener('click', () => {
+		setMobileCategoryOpen($categoryDeck?.dataset.mobileOpen !== 'true');
+	});
+}
 
 $searchInput.addEventListener('input', () => {
   clearTimeout(searchTimeout);
@@ -3152,6 +3376,7 @@ $clearSearch.classList.toggle('hidden', !searchQuery);
 syncControls();
 updateMetrics();
 renderFilters();
+setMobileCategoryOpen(false);
 renderPrompts();
 </script>
 </body>
