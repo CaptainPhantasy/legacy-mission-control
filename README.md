@@ -4,7 +4,7 @@ Legacy Mission Control is a static, single-file prompt library for daily operato
 
 ## What this app provides
 
-- 873 prompt payloads embedded directly in the page.
+- 973 prompt payloads embedded directly in the page.
 - Category filters, live search, and persistent sort order.
 - Prompt detail modal with copy-to-clipboard workflow and usage tracking.
 - Favorites, Saved/All view modes, JSON export, and durable local state.
@@ -109,7 +109,7 @@ git diff --check -- mission-control-prompt-library.html README.md CHANGELOG.md q
 
 Use a browser automation pass to verify:
 
-1. 873 payloads render initially.
+1. 973 payloads render initially.
 2. Category filter, search, and sort produce non-empty filtered results.
 3. Modal opens, labels itself with the prompt title, and focuses the close button.
 4. Copy action changes usage state and displays feedback.
