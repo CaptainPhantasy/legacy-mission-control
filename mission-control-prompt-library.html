@@ -1528,8 +1528,142 @@ body[data-theme-palette] .category-pill.active {
 }
 
 .hero-cockpit .header-content.collapsed {
-  max-height: 72px;
-  overflow: hidden;
+	max-height: 72px;
+	overflow: hidden;
+}
+
+/* Mobile prompt-picker mode: prioritize scanning payloads over decorative chrome. */
+@media (max-width: 767px) {
+	#app {
+		padding-top: max(6px, env(safe-area-inset-top)) !important;
+		padding-bottom: calc(68px + env(safe-area-inset-bottom)) !important;
+	}
+	.hero-cockpit,
+	#metrics,
+	.command-eyebrow,
+	.command-panel h2,
+	#resultStatus {
+		display: none !important;
+	}
+	.sticky-bar {
+		margin: 0 0 8px 0;
+		padding: 0 0 8px 0;
+		background: linear-gradient(180deg, rgba(9,9,11,0.97), rgba(9,9,11,0.88));
+	}
+	.command-panel {
+		padding: 8px !important;
+		border-radius: 16px !important;
+		box-shadow: 0 12px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04);
+	}
+	.command-panel .flex.flex-col.gap-3 {
+		gap: 6px !important;
+	}
+	#searchInput {
+		min-height: 40px;
+		padding-top: 8px !important;
+		padding-bottom: 8px !important;
+		font-size: 13px;
+	}
+	.category-deck {
+		padding: 0;
+		border: 0;
+		background: transparent;
+		box-shadow: none;
+	}
+	.category-mobile-toggle {
+		min-height: 36px;
+		padding: 5px 8px;
+		border-radius: 12px;
+	}
+	.category-mobile-eyebrow,
+	.category-toggle-action {
+		display: none;
+	}
+	.category-mobile-summary {
+		font-size: 12px;
+		line-height: 1.15;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.mobile-quick-controls {
+		display: grid !important;
+		gap: 6px !important;
+		grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+		align-items: stretch;
+	}
+	.mobile-quick-controls .inline-flex[role="group"],
+	.mobile-quick-controls .mobile-sort-shell {
+		height: 36px;
+	}
+	.mobile-quick-controls .view-toggle,
+	.mobile-quick-controls #sortSelect {
+		min-height: 36px;
+		height: 36px;
+		font-size: 10px;
+		padding-top: 6px !important;
+		padding-bottom: 6px !important;
+	}
+	#promptGrid {
+		gap: 8px !important;
+	}
+	.prompt-card {
+		min-height: 0;
+		max-height: none;
+		padding: 10px !important;
+		border-radius: 16px !important;
+	}
+	.prompt-card .card-body > .flex:first-child {
+		display: none !important;
+	}
+	.category-tag {
+		font-size: 9px;
+		line-height: 1;
+		padding: 4px 7px;
+		max-width: calc(100% - 48px);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.prompt-card h3 {
+		font-size: 14px;
+		line-height: 1.12;
+		margin-bottom: 4px !important;
+	}
+	.prompt-card .contract-text {
+		font-size: 11px;
+		line-height: 1.28;
+		margin-bottom: 4px !important;
+		-webkit-line-clamp: 2;
+	}
+	.prompt-card .card-body > div:nth-child(4) {
+		display: none;
+	}
+	.prompt-card .card-footer {
+		padding-top: 4px !important;
+		gap: 4px;
+		flex-direction: row;
+		align-items: center;
+	}
+	.prompt-card .card-footer > .flex:first-child {
+		display: none;
+	}
+	.prompt-card .card-footer .card-actions {
+		width: 100%;
+		display: grid;
+		grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+		gap: 6px;
+	}
+	.detail-btn,
+	.copy-btn,
+	.fav-btn {
+		min-height: 32px;
+	}
+	.detail-btn,
+	.copy-btn {
+		font-size: 10px;
+		padding: 5px 8px !important;
+	}
 }
 
 </style>
