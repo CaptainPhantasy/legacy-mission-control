@@ -23,8 +23,9 @@ Checks:
 """
 
 import sys
-import json
 import re
+
+from prompt_sheet_tools import extract_prompts
 
 EXISTING_CATEGORIES = {
     "Agent Engineering",
@@ -37,7 +38,6 @@ EXISTING_CATEGORIES = {
 PLACEHOLDER_PATTERNS = [
     r"\bTBD\b",
     r"\bTODO\b",
-    r"\bINSERT\b",
     r"\bPLACEHOLDER\b",
     r"\[INSERT",
     r"\[PLACEHOLDER",
@@ -45,6 +45,7 @@ PLACEHOLDER_PATTERNS = [
     r"Fill in",
     r"your text here",
 ]
+
 
 def validate_prompt_sheet(filepath):
     errors = []
@@ -58,17 +59,10 @@ def validate_prompt_sheet(filepath):
         print(f"ERROR: File not found: {filepath}")
         return 1
 
-    # Extract prompts array
-    match = re.search(r"const prompts:\s*Prompt\[\]\s*=\s*(\[[\s\S]*\]);", content)
-    if not match:
-        print("ERROR: Could not find 'const prompts: Prompt[] = [...]' in file.")
-        return 1
-
-    # Parse JSON
     try:
-        prompts = json.loads(match.group(1))
-    except json.JSONDecodeError as e:
-        print(f"ERROR: Invalid JSON in prompts array: {e}")
+        prompts = extract_prompts(content)
+    except (ValueError, TypeError) as e:
+        print(f"ERROR: Invalid prompts array: {e}")
         return 1
 
     if not isinstance(prompts, list):
@@ -90,7 +84,7 @@ def validate_prompt_sheet(filepath):
     required_fields = ["id", "category", "title", "contract", "matrix", "content"]
 
     for i, p in enumerate(prompts):
-        prompt_label = f"Prompt #{i+1}"
+        prompt_label = f"Prompt #{i + 1}"
         pid = p.get("id", "?")
 
         # Required fields
@@ -102,7 +96,9 @@ def validate_prompt_sheet(filepath):
 
         # ID checks
         if not isinstance(p.get("id"), int):
-            errors.append(f"{prompt_label}: id must be an integer, got {type(p.get('id')).__name__}")
+            errors.append(
+                f"{prompt_label}: id must be an integer, got {type(p.get('id')).__name__}"
+            )
         elif p["id"] in seen_ids:
             errors.append(f"{prompt_label} (id={pid}): Duplicate id {p['id']}")
         else:
@@ -115,20 +111,30 @@ def validate_prompt_sheet(filepath):
                 new_categories.add(cat)
                 # Validate new category format
                 if len(cat.split()) < 2 or len(cat.split()) > 4:
-                    warnings.append(f"{prompt_label} (id={pid}): New category '{cat}' should be 2-4 words")
+                    warnings.append(
+                        f"{prompt_label} (id={pid}): New category '{cat}' should be 2-4 words"
+                    )
                 if cat != cat.title() and cat != "The Chef's Logic":
-                    warnings.append(f"{prompt_label} (id={pid}): New category '{cat}' should use Title Case")
+                    warnings.append(
+                        f"{prompt_label} (id={pid}): New category '{cat}' should use Title Case"
+                    )
                 if any(c in cat for c in "-/|\\"):
-                    errors.append(f"{prompt_label} (id={pid}): Category '{cat}' contains special characters")
+                    errors.append(
+                        f"{prompt_label} (id={pid}): Category '{cat}' contains special characters"
+                    )
 
         # Title
         title = p.get("title", "")
         if title:
             word_count = len(title.split())
             if word_count < 3:
-                warnings.append(f"{prompt_label} (id={pid}): Title too short ({word_count} words, recommended 3-12)")
+                warnings.append(
+                    f"{prompt_label} (id={pid}): Title too short ({word_count} words, recommended 3-12)"
+                )
             elif word_count > 12:
-                warnings.append(f"{prompt_label} (id={pid}): Title too long ({word_count} words, recommended 3-12)")
+                warnings.append(
+                    f"{prompt_label} (id={pid}): Title too long ({word_count} words, recommended 3-12)"
+                )
             if title in seen_titles:
                 errors.append(f"{prompt_label} (id={pid}): Duplicate title '{title}'")
             else:
@@ -137,18 +143,24 @@ def validate_prompt_sheet(filepath):
         # Contract
         contract = p.get("contract", "")
         if contract and not any(kw in contract.lower() for kw in ["input", "output"]):
-            warnings.append(f"{prompt_label} (id={pid}): Contract should describe Input → Output")
+            warnings.append(
+                f"{prompt_label} (id={pid}): Contract should describe Input → Output"
+            )
 
         # Matrix
         matrix = p.get("matrix", [])
         if not isinstance(matrix, list):
             errors.append(f"{prompt_label} (id={pid}): matrix must be an array")
         elif len(matrix) != 3:
-            errors.append(f"{prompt_label} (id={pid}): matrix must have exactly 3 items, got {len(matrix)}")
+            errors.append(
+                f"{prompt_label} (id={pid}): matrix must have exactly 3 items, got {len(matrix)}"
+            )
         else:
             for j, item in enumerate(matrix):
                 if len(item) > 60:
-                    warnings.append(f"{prompt_label} (id={pid}): matrix[{j}] is {len(item)} chars (recommended under 60)")
+                    warnings.append(
+                        f"{prompt_label} (id={pid}): matrix[{j}] is {len(item)} chars (recommended under 60)"
+                    )
                 if not item:
                     errors.append(f"{prompt_label} (id={pid}): matrix[{j}] is empty")
 
@@ -157,9 +169,13 @@ def validate_prompt_sheet(filepath):
         if content:
             word_count = len(content.split())
             if word_count < 100:
-                warnings.append(f"{prompt_label} (id={pid}): Content is {word_count} words (recommended 100-800)")
+                warnings.append(
+                    f"{prompt_label} (id={pid}): Content is {word_count} words (recommended 100-800)"
+                )
             elif word_count > 800:
-                warnings.append(f"{prompt_label} (id={pid}): Content is {word_count} words (recommended 100-800)")
+                warnings.append(
+                    f"{prompt_label} (id={pid}): Content is {word_count} words (recommended 100-800)"
+                )
             if content in seen_content:
                 errors.append(f"{prompt_label} (id={pid}): Duplicate content")
             else:
@@ -170,7 +186,9 @@ def validate_prompt_sheet(filepath):
             val = p.get(field, "")
             for pattern in PLACEHOLDER_PATTERNS:
                 if re.search(pattern, val, re.IGNORECASE):
-                    errors.append(f"{prompt_label} (id={pid}): Placeholder text '{pattern}' found in {field}")
+                    errors.append(
+                        f"{prompt_label} (id={pid}): Placeholder text '{pattern}' found in {field}"
+                    )
                     break
 
     # ID sequence check
@@ -191,7 +209,9 @@ def validate_prompt_sheet(filepath):
     print(f"\n  Prompts checked:  {len(prompts)}")
     print(f"  Errors:           {len(errors)}")
     print(f"  Warnings:         {len(warnings)}")
-    print(f"  New categories:   {', '.join(new_categories) if new_categories else 'None'}")
+    print(
+        f"  New categories:   {', '.join(new_categories) if new_categories else 'None'}"
+    )
     print(f"  ID range:         {min(ids)} - {max(ids)}" if ids else "  ID range: N/A")
 
     # Category breakdown
@@ -199,7 +219,7 @@ def validate_prompt_sheet(filepath):
     for p in prompts:
         c = p.get("category", "UNKNOWN")
         cat_counts[c] = cat_counts.get(c, 0) + 1
-    print(f"\n  By category:")
+    print("\n  By category:")
     for cat, count in sorted(cat_counts.items()):
         marker = " (NEW)" if cat not in EXISTING_CATEGORIES else ""
         print(f"    {cat}: {count}{marker}")

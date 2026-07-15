@@ -12,6 +12,5 @@ node_modules/
 *.zip
 zip*/
 
-# Source TS files (already imported into HTML)
-data.ts
+# Legacy source TS file (already imported into HTML)
 deepseek_typescript_20260508_6ea593.ts

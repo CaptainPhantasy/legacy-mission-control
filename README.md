@@ -82,6 +82,21 @@ Expected result: no horizontal overflow, header toggle visible, bottom navigatio
 
 Run these checks before release or after any UI/data change.
 
+### Prompt source maintenance
+
+`RUST-PROMPTS.md` preserves the human-readable source for prompt IDs 774–873.
+`data.ts` contains the two harness prompt categories at IDs 874–973. Validate and
+convert the TypeScript prompt sheet with:
+
+```bash
+python3 validate-prompt-sheet.py data.ts
+python3 convert_prompts.py data.ts > /tmp/promptbook-prompts.js
+python3 -m unittest discover -s tests -v
+```
+
+The converter writes compact JavaScript objects to standard output for review
+and insertion into the single-file application; it does not modify the HTML.
+
 ### JavaScript syntax validation
 
 ```bash
