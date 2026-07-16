@@ -35,7 +35,7 @@ The importer reads the `prompts` array from this file. The `Category` type and `
 
 Every prompt object has exactly 6 fields. No extra fields. No missing fields.
 
-```
+```text
 ┌────────────┬───────────┬────────────────────────────────────────────────────┐
 │ Field      │ Type      │ Rules                                             │
 ├────────────┼───────────┼────────────────────────────────────────────────────┤
@@ -56,7 +56,7 @@ Every prompt object has exactly 6 fields. No extra fields. No missing fields.
 
 These 5 categories already exist in the library. Use these strings exactly:
 
-```
+```text
 Agent Engineering
 SaaS Ops
 The Chef's Logic
@@ -100,7 +100,7 @@ To create a new category, simply use the new category name in your prompt object
 
 ## ID Numbering
 
-```
+```text
 ┌─────────────────────────────────────┬────────────────┐
 │ Scenario                            │ ID Range       │
 ├─────────────────────────────────────┼────────────────┤
@@ -294,7 +294,7 @@ export const prompts: Prompt[] = [
 
 Before submitting your prompt sheet, verify every item:
 
-```
+```text
 ┌─────┬───────────────────────────────────────────────────────┐
 │  #  │ Check                                                 │
 ├─────┼───────────────────────────────────────────────────────┤
@@ -322,7 +322,7 @@ Before submitting your prompt sheet, verify every item:
 
 ## Content Writing Guidelines
 
-### Strong Prompt Content Follows This Pattern:
+### Strong Prompt Content Follows This Pattern
 
 1. **Role declaration** — "You are a [Specific Role]."
 2. **Task statement** — "Given [inputs], produce [output]."
@@ -335,9 +335,9 @@ Before submitting your prompt sheet, verify every item:
    - "Return a completion matrix."
    - "Prefer a practical working artifact over theoretical perfection."
 
-### Anti-Patterns to Avoid:
+### Anti-Patterns to Avoid
 
-```
+```text
 ┌──────────────────────────────────────┬──────────────────────────────────────┐
 │ Do Not                               │ Do Instead                           │
 ├──────────────────────────────────────┼──────────────────────────────────────┤

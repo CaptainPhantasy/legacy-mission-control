@@ -23,9 +23,8 @@ Checks:
 """
 
 import sys
-import re
 
-from prompt_sheet_tools import extract_prompts
+from prompt_sheet_tools import extract_prompts, find_placeholder
 
 EXISTING_CATEGORIES = {
     "Agent Engineering",
@@ -34,17 +33,6 @@ EXISTING_CATEGORIES = {
     "Growth Marketing",
     "Vibe Coding",
 }
-
-PLACEHOLDER_PATTERNS = [
-    r"\bTBD\b",
-    r"\bTODO\b",
-    r"\bPLACEHOLDER\b",
-    r"\[INSERT",
-    r"\[PLACEHOLDER",
-    r"\[TBD",
-    r"Fill in",
-    r"your text here",
-]
 
 
 def validate_prompt_sheet(filepath):
@@ -96,9 +84,7 @@ def validate_prompt_sheet(filepath):
 
         # ID checks
         if not isinstance(p.get("id"), int):
-            errors.append(
-                f"{prompt_label}: id must be an integer, got {type(p.get('id')).__name__}"
-            )
+            errors.append(f"{prompt_label}: id must be an integer, got {type(p.get('id')).__name__}")
         elif p["id"] in seen_ids:
             errors.append(f"{prompt_label} (id={pid}): Duplicate id {p['id']}")
         else:
@@ -111,17 +97,11 @@ def validate_prompt_sheet(filepath):
                 new_categories.add(cat)
                 # Validate new category format
                 if len(cat.split()) < 2 or len(cat.split()) > 4:
-                    warnings.append(
-                        f"{prompt_label} (id={pid}): New category '{cat}' should be 2-4 words"
-                    )
+                    warnings.append(f"{prompt_label} (id={pid}): New category '{cat}' should be 2-4 words")
                 if cat != cat.title() and cat != "The Chef's Logic":
-                    warnings.append(
-                        f"{prompt_label} (id={pid}): New category '{cat}' should use Title Case"
-                    )
+                    warnings.append(f"{prompt_label} (id={pid}): New category '{cat}' should use Title Case")
                 if any(c in cat for c in "-/|\\"):
-                    errors.append(
-                        f"{prompt_label} (id={pid}): Category '{cat}' contains special characters"
-                    )
+                    errors.append(f"{prompt_label} (id={pid}): Category '{cat}' contains special characters")
 
         # Title
         title = p.get("title", "")
@@ -143,18 +123,14 @@ def validate_prompt_sheet(filepath):
         # Contract
         contract = p.get("contract", "")
         if contract and not any(kw in contract.lower() for kw in ["input", "output"]):
-            warnings.append(
-                f"{prompt_label} (id={pid}): Contract should describe Input → Output"
-            )
+            warnings.append(f"{prompt_label} (id={pid}): Contract should describe Input → Output")
 
         # Matrix
         matrix = p.get("matrix", [])
         if not isinstance(matrix, list):
             errors.append(f"{prompt_label} (id={pid}): matrix must be an array")
         elif len(matrix) != 3:
-            errors.append(
-                f"{prompt_label} (id={pid}): matrix must have exactly 3 items, got {len(matrix)}"
-            )
+            errors.append(f"{prompt_label} (id={pid}): matrix must have exactly 3 items, got {len(matrix)}")
         else:
             for j, item in enumerate(matrix):
                 if len(item) > 60:
@@ -184,12 +160,9 @@ def validate_prompt_sheet(filepath):
         # Placeholder check across all text fields
         for field in ["title", "contract", "content"]:
             val = p.get(field, "")
-            for pattern in PLACEHOLDER_PATTERNS:
-                if re.search(pattern, val, re.IGNORECASE):
-                    errors.append(
-                        f"{prompt_label} (id={pid}): Placeholder text '{pattern}' found in {field}"
-                    )
-                    break
+            pattern = find_placeholder(val)
+            if pattern:
+                errors.append(f"{prompt_label} (id={pid}): Placeholder text '{pattern}' found in {field}")
 
     # ID sequence check
     ids = sorted(seen_ids)
@@ -209,9 +182,7 @@ def validate_prompt_sheet(filepath):
     print(f"\n  Prompts checked:  {len(prompts)}")
     print(f"  Errors:           {len(errors)}")
     print(f"  Warnings:         {len(warnings)}")
-    print(
-        f"  New categories:   {', '.join(new_categories) if new_categories else 'None'}"
-    )
+    print(f"  New categories:   {', '.join(new_categories) if new_categories else 'None'}")
     print(f"  ID range:         {min(ids)} - {max(ids)}" if ids else "  ID range: N/A")
 
     # Category breakdown
