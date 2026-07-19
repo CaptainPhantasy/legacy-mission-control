@@ -1,5 +1,12 @@
 # Changelog
 
+- [2026-07-15] Repaired prompt tooling and made the browser app self-contained
+    - What changed: Hardened TypeScript prompt parsing and validation, escaped generated script end tags, added exact Python tooling, compiled Tailwind 3.4.17 into a checked-in stylesheet, removed remote runtime assets, restored the mobile category/favorite row, and corrected themed primary text colors.
+    - Why: Review found parser, validator, and generated-script defects. Rendered mobile testing then found that CDN failure destroyed the layout, mobile users could not add favorites, and High Contrast cards used light text on a light panel.
+    - Files/areas touched: Prompt conversion and validation tools, tests, static app HTML and CSS, documentation, and QA evidence.
+    - Tests run: Nine Python unit tests; prompt validation and source/embedded parity; Ruff; Markdownlint; JSON and JavaScript parsing; mobile viewports at 320×568, 390×844, and 430×932; desktop at 1440×1000; modal, search, favorite, Saved view, and theme persistence workflows; Gitleaks.
+    - Result: 100 prompt-sheet entries validate with zero errors or warnings, all 973 embedded prompts render, the app has no remote runtime dependency, tested viewports have no horizontal overflow, and the browser reports no runtime errors or warnings.
+
 - [2026-05-09 09:44:55 EDT] Imported all TEAR app themes into Mission Control
     - What changed: Added Light, Dark, System, FLOYD, Red Graphite, High Contrast, Charcoal, Solarized Light, Solarized Dark, and Dracula palettes; added a persistent TEAR theme selector; wired theme variables into the glass cockpit UI.
     - Why: Human operators need all available TEAR palettes usable from the single-file app, with durable selection across reloads.
@@ -20,7 +27,6 @@
     - Files/areas touched: `mission-control-prompt-library.html`
     - Tests run: Mobile viewport check before fix.
     - Result: Fix applied; post-fix verification pending.
-
 
 - [2026-05-09 09:44:55 EDT] Removed local secret-bearing env file and added safe example
     - What changed: Deleted ignored `.env.local` after redacted secret scan flagged a JWT-shaped value; added `.env.example` with no required secrets and explicit safe-placeholder guidance.

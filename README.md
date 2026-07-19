@@ -1,6 +1,6 @@
 # Legacy Mission Control — Prompt Library
 
-Legacy Mission Control is a static, single-file prompt library for daily operator use. It ships as one HTML file with embedded prompt data, cockpit-style glass UI, persistent controls, TEAR theme palettes, and mobile viewport fit behavior.
+Legacy Mission Control is a static prompt library for daily operator use. It ships as an HTML file with embedded prompt data and local assets, cockpit-style glass UI, persistent controls, TEAR theme palettes, and mobile viewport fit behavior.
 
 ## What this app provides
 
@@ -15,10 +15,8 @@ Legacy Mission Control is a static, single-file prompt library for daily operato
 ## Requirements
 
 - A modern browser with JavaScript enabled.
-- Network access for the CDN resources used by the single-file artifact:
-  - Tailwind CDN for utility classes.
-  - Google Fonts for the display, body, and mono typefaces.
-- No local server, package install, build step, or runtime secrets are required.
+- Keep the checked-in `assets/` directory next to the HTML file.
+- No network access, local server, package install, build step, or runtime secrets are required.
 
 ## Open locally
 
@@ -82,6 +80,26 @@ Expected result: no horizontal overflow, header toggle visible, bottom navigatio
 
 Run these checks before release or after any UI/data change.
 
+### Prompt source maintenance
+
+`RUST-PROMPTS.md` preserves the human-readable source for prompt IDs 774–873.
+`data.ts` contains the two harness prompt categories at IDs 874–973. Validate and
+convert the TypeScript prompt sheet with:
+
+```bash
+uv sync --frozen
+uv run --frozen python validate-prompt-sheet.py data.ts
+uv run --frozen python convert_prompts.py data.ts > /tmp/promptbook-prompts.js
+uv run --frozen python -m unittest discover -s tests -v
+uv run --frozen ruff check .
+uv run --frozen ruff format --check .
+```
+
+The converter writes compact JavaScript objects to standard output for review
+and insertion into the static application; it does not modify the HTML.
+It accepts normal TypeScript trailing commas and escapes HTML script end tags
+inside generated string literals.
+
 ### JavaScript syntax validation
 
 ```bash
@@ -89,8 +107,7 @@ node - <<'NODE'
 const fs = require('fs');
 const html = fs.readFileSync('mission-control-prompt-library.html', 'utf8');
 const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)]
-  .map(m => m[1])
-  .filter(s => !s.includes('cdn.tailwindcss.com'));
+  .map(m => m[1]);
 for (const [index, script] of scripts.entries()) {
   new Function(script);
   console.log(`script ${index + 1}: syntax ok (${script.length} chars)`);
@@ -138,18 +155,19 @@ agent-browser --session promptbook-release console
 - Release scans should check staged files and the working tree for API keys, tokens, passwords, private keys, JWTs, connection strings, and provider credentials.
 - Prompt payload text may intentionally contain placeholder strings such as `{signed_jwt}` as examples. Treat these as non-secrets only when they are template placeholders, not live credentials.
 
-## Known limitations
+## Static styling
 
-- The app preserves a single-file deployment model by loading Tailwind from the CDN. Browser console output warns that the Tailwind CDN is not recommended for production build pipelines. This is an accepted tradeoff for the current artifact model; if the deployment model changes, compile the required Tailwind utilities and inline them into the HTML artifact.
-- Google Fonts are loaded from the network. If offline use becomes mandatory, vendor or inline font assets and verify licensing.
+`assets/tailwind-3.4.17.css` is the compiled, minified Tailwind stylesheet used
+by the page. It is checked in so opening the page never depends on the Tailwind
+CDN or a local build tool. The page uses its declared system font fallbacks and
+does not fetch web fonts.
 
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | Theme or favorites reset | Browser local storage was cleared or blocked. | Re-select the theme and favorites; allow local storage for the file origin. |
-| Fonts look different | Google Fonts did not load. | Check network access or accept system fallbacks. |
-| Console shows Tailwind CDN warning | Current single-file artifact uses Tailwind CDN. | Documented limitation; not a runtime failure. |
+| Layout is unstyled | The `assets/` directory is missing or was moved away from the HTML file. | Restore `assets/tailwind-3.4.17.css` beside the application. |
 | Copy does not work | Browser clipboard permission blocked the file origin. | Use a browser that permits clipboard writes for the opened file, or serve the file from a trusted local/static origin. |
 | Mobile controls feel clipped | Viewport not reloaded after browser chrome/orientation changes. | Reload and rerun viewport matrix; file a regression if horizontal overflow appears. |
 
@@ -159,6 +177,6 @@ agent-browser --session promptbook-release console
 - `git diff --check` reports no output.
 - Human workflow regression passes for discovery, inspect/copy, and saved/export/theme persistence.
 - Mobile viewport matrix passes at 320 × 568, 390 × 844, and 430 × 932.
-- Agent-browser console has no runtime errors; Tailwind CDN warning is documented if still present.
+- Agent-browser console has no runtime errors or warnings.
 - Redacted secret scan reports no live secrets.
 - QA evidence and changelog entries are updated before commit.
